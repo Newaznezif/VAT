@@ -288,7 +288,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         <button className="btn" onClick={() => window.print()} style={{backgroundColor: '#fff', color: '#2563eb', border: '1px solid #2563eb'}}>Print</button>
         <button className="btn" onClick={() => setShowQrModal(true)} style={{backgroundColor: '#6366f1', color: '#fff'}}>Generate QR</button>
         <button className="btn" onClick={() => setShowQuickFill(true)} style={{backgroundColor: '#f59e0b', color: '#fff'}}>Quick Fill Form</button>
-        <button className="btn" onClick={onLogout} style={{backgroundColor: '#ef4444', color: '#fff', marginLeft: 'auto'}}>Logout</button>
+        <button className="btn" onClick={onLogout} style={{backgroundColor: '#ef4444', color: '#fff'}}>Logout</button>
       </div>
 
       {showQuickFill && (
