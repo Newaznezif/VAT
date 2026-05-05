@@ -390,8 +390,8 @@ const InvoiceForm: React.FC = () => {
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {/* Top 3 rows align with Unit Price column (65% spacer, 15% label area) */}
             <div style={{ display: 'flex', minHeight: '25px' }}>
-              <div style={{ width: '65%' }}></div>
-              <div style={{ width: '15%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
+              <div style={{ width: '62%' }}></div>
+              <div style={{ width: '18%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', whiteSpace: 'nowrap' }}>
                 <span style={{ fontWeight: 'bold' }}>ሰርቪስ ቻርጅ /ካለ/</span>
                 <span>Service Charge</span>
               </div>
@@ -401,8 +401,8 @@ const InvoiceForm: React.FC = () => {
             </div>
 
             <div style={{ display: 'flex', minHeight: '25px' }}>
-              <div style={{ width: '65%' }}></div>
-              <div style={{ width: '15%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
+              <div style={{ width: '62%' }}></div>
+              <div style={{ width: '18%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', whiteSpace: 'nowrap' }}>
                 <span style={{ fontWeight: 'bold' }}>ድምር</span>
                 <span>Total</span>
               </div>
@@ -412,8 +412,8 @@ const InvoiceForm: React.FC = () => {
             </div>
 
             <div style={{ display: 'flex', minHeight: '25px' }}>
-              <div style={{ width: '65%' }}></div>
-              <div style={{ width: '15%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
+              <div style={{ width: '62%' }}></div>
+              <div style={{ width: '18%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', whiteSpace: 'nowrap' }}>
                 <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ. /15%/</span>
                 <span>VAT</span>
               </div>
