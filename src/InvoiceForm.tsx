@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { toWords } from 'number-to-words';
-import { Document, Packer, Paragraph, ImageRun } from 'docx';
 import { saveAs } from 'file-saver';
 
 const InvoiceForm: React.FC = () => {
@@ -366,7 +365,7 @@ const InvoiceForm: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {items.map((item, index) => (
+            {items.map((item) => (
               <tr key={item.id}>
                 <td></td>
                 <td className="desc-col">
@@ -398,7 +397,7 @@ const InvoiceForm: React.FC = () => {
                 <span>Service Charge</span>
               </div>
               <div style={{ width: '40%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000' }}>
-                 <input type="number" style={{ width: '100%', height: '100%', textAlign: 'center' }} value={serviceCharge} onChange={e => setServiceCharge(e.target.value)} />
+                 <input type="number" style={{ width: '100%', height: '100%', textAlign: 'center' }} value={serviceCharge} onChange={e => setServiceCharge(e.target.value === "" ? "" : Number(e.target.value))} />
               </div>
             </div>
 
