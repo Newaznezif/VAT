@@ -498,7 +498,7 @@ const InvoiceForm: React.FC = () => {
             </div>
           </div>
 
-          <div className="distribution-row" style={{ display: 'flex', gap: '15px', marginTop: '5px' }}>
+          <div className="distribution-row" style={{ display: 'flex', gap: '8px', marginTop: '5px' }}>
              <div className="text-group" style={{ alignItems: 'flex-start' }}>
                <span style={{fontWeight: 'bold'}}>ክፍፍል:-</span>
                <span>Distribution:-</span>
