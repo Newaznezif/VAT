@@ -199,9 +199,9 @@ const InvoiceForm: React.FC = () => {
                     Basic Information
                   </h3>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                    <div className="form-group" style={{ backgroundColor: 'rgba(220, 38, 38, 0.05)', padding: '10px', borderRadius: '8px', border: '1px solid rgba(220, 38, 38, 0.2)' }}>
-                      <label style={{ color: '#dc2626' }}>Invoice No.</label>
-                      <input type="text" value={formData.invoiceNo} onChange={e => handleFormChange('invoiceNo', e.target.value)} placeholder="Enter No." style={{ borderColor: '#dc2626', color: '#dc2626', fontWeight: 'bold' }} />
+                    <div className="form-group">
+                      <label>Invoice No.</label>
+                      <input type="text" value={formData.invoiceNo} onChange={e => handleFormChange('invoiceNo', e.target.value)} placeholder="Enter No." />
                     </div>
                     <div className="form-group">
                       <label>Invoice Date</label>
@@ -345,11 +345,10 @@ const InvoiceForm: React.FC = () => {
                     width: '120px', 
                     fontSize: '18px', 
                     fontWeight: 'bold', 
-                    color: '#dc2626', 
-                    border: '1px solid #dc2626',
-                    padding: '2px 8px',
-                    borderRadius: '4px',
-                    backgroundColor: 'rgba(220, 38, 38, 0.05)',
+                    color: '#000', 
+                    border: 'none',
+                    padding: '2px 0',
+                    backgroundColor: 'transparent',
                     textAlign: 'center'
                   }} 
                   value={formData.invoiceNo} 
