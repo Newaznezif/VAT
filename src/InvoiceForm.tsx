@@ -388,7 +388,7 @@ const InvoiceForm: React.FC = () => {
 
         {/* Calculations */}
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-            <div style={{ display: 'flex', minHeight: '30px' }}>
+            <div style={{ display: 'flex', minHeight: '25px' }}>
               <div style={{ width: '40%' }}></div>
               <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
                 <span style={{ fontWeight: 'bold' }}>ሰርቪስ ቻርጅ ሐሳ/</span>
@@ -399,7 +399,7 @@ const InvoiceForm: React.FC = () => {
               </div>
             </div>
 
-            <div style={{ display: 'flex', minHeight: '30px' }}>
+            <div style={{ display: 'flex', minHeight: '25px' }}>
               <div style={{ width: '40%' }}></div>
               <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
                 <span style={{ fontWeight: 'bold' }}>ድምር</span>
@@ -410,10 +410,10 @@ const InvoiceForm: React.FC = () => {
               </div>
             </div>
 
-            <div style={{ display: 'flex', minHeight: '30px' }}>
+            <div style={{ display: 'flex', minHeight: '25px' }}>
               <div style={{ width: '40%' }}></div>
               <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
-                <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ.  15%/</span>
+                <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ. /15%/</span>
                 <span>VAT</span>
               </div>
               <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
