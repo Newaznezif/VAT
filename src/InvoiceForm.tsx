@@ -513,9 +513,7 @@ const InvoiceForm: React.FC = () => {
               </div>
             </div>
 
-            <div className="auth-sig">
-              <span>Authorized Signature</span>
-            </div>
+
           </div>
         </div>
 
