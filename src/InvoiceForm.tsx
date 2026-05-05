@@ -448,7 +448,7 @@ const InvoiceForm: React.FC = () => {
           </div>
 
           <div className="payment-row" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-            <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center', whiteSpace: 'nowrap', marginBottom: '8px' }}>
+            <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center', whiteSpace: 'nowrap' }}>
               <span style={{fontWeight: 'bold'}}>የክፍያ ሁኔታ/</span>
               <span style={{marginLeft: '4px'}}>Mode of Payment</span>
             </div>
@@ -480,7 +480,7 @@ const InvoiceForm: React.FC = () => {
             </div>
           </div>
 
-          <div className="signature-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', marginTop: '10px' }}>
+          <div className="signature-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', marginTop: '5px' }}>
             <div className="field-row" style={{ width: '55%' }}>
               <div className="text-group" style={{ flexDirection: 'row', alignItems: 'baseline', whiteSpace: 'nowrap' }}>
                 <span style={{fontWeight: 'bold'}}>ቫውቸር ቁጥር/</span>
@@ -498,7 +498,7 @@ const InvoiceForm: React.FC = () => {
             </div>
           </div>
 
-          <div className="distribution-row" style={{ display: 'flex', gap: '40px', marginTop: '10px' }}>
+          <div className="distribution-row" style={{ display: 'flex', gap: '40px', marginTop: '5px' }}>
              <div className="text-group" style={{ alignItems: 'flex-start' }}>
                <span style={{fontWeight: 'bold'}}>ክፍፍል:-</span>
                <span>Distribution:-</span>
