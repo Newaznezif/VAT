@@ -480,42 +480,45 @@ const InvoiceForm: React.FC = () => {
             </div>
           </div>
 
-          <div className="signature-row">
-            <div className="field-row" style={{ width: '40%' }}>
-              <div className="text-group">
-                <span style={{fontWeight: 'bold'}}>ቫውቸር ቁጥር</span>
-                <span>Voucher No.</span>
+          <div className="signature-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', marginTop: '10px' }}>
+            <div className="field-row" style={{ width: '55%' }}>
+              <div className="text-group" style={{ flexDirection: 'row', alignItems: 'baseline', whiteSpace: 'nowrap' }}>
+                <span style={{fontWeight: 'bold'}}>ቫውቸር ቁጥር/</span>
+                <span style={{marginLeft: '4px'}}>Voucher No.</span>
               </div>
               <input className="field-input" type="text" />
             </div>
 
-            <div className="field-row" style={{ width: '50%' }}>
-              <div className="text-group">
-                <span style={{fontWeight: 'bold'}}>የተቀባይ ስምና ፊርማ</span>
-                <span>Receiver Name & Signature</span>
+            <div className="field-row" style={{ width: '40%' }}>
+              <div className="text-group" style={{ flexDirection: 'row', alignItems: 'baseline', whiteSpace: 'nowrap' }}>
+                <span style={{fontWeight: 'bold'}}>የተቀባይ ስምና ፊርማ/</span>
+                <span style={{marginLeft: '4px'}}>Receiver Name & Signature</span>
               </div>
               <input className="field-input" type="text" />
             </div>
           </div>
 
-          <div className="distribution-row">
-            <div className="dist-texts">
-              <div style={{fontWeight: 'bold'}}>
-                <span>ክፍፍል:-</span>
-                <span>ዋናው</span>
-                <span>ለከፋይ</span>
-                <span>1ኛ ኮፒ ለሂሳብ ክፍል</span>
-                <span>2ኛ ኮፒ ለፓድ</span>
-              </div>
-              <div>
-                <span>Distribution:-</span>
-                <span>Original (Customer)</span>
-                <span>1st Copy (Account)</span>
-                <span>2nd Copy (Pad)</span>
-              </div>
-            </div>
-
-
+          <div className="distribution-row" style={{ display: 'flex', gap: '40px', marginTop: '10px' }}>
+             <div className="text-group" style={{ alignItems: 'flex-start' }}>
+               <span style={{fontWeight: 'bold'}}>ክፍፍል:-</span>
+               <span>Distribution:-</span>
+             </div>
+             <div className="text-group" style={{ alignItems: 'flex-start' }}>
+               <span style={{fontWeight: 'bold'}}>ዋናው</span>
+               <span>Original Customer</span>
+             </div>
+             <div className="text-group" style={{ alignItems: 'flex-start' }}>
+               <span style={{fontWeight: 'bold'}}>ለከፋይ</span>
+               <span>Customer</span>
+             </div>
+             <div className="text-group" style={{ alignItems: 'flex-start' }}>
+               <span style={{fontWeight: 'bold'}}>1ኛ ኮፒ ለሂሳብ ክፍል</span>
+               <span>1st Copy Account</span>
+             </div>
+             <div className="text-group" style={{ alignItems: 'flex-start' }}>
+               <span style={{fontWeight: 'bold'}}>2ኛ ኮፒ ለፓድ</span>
+               <span>2nd Copy Pad</span>
+             </div>
           </div>
         </div>
 
