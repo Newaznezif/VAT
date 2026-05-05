@@ -199,9 +199,9 @@ const InvoiceForm: React.FC = () => {
                     Basic Information
                   </h3>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                    <div className="form-group">
-                      <label>Invoice No.</label>
-                      <input type="text" value={formData.invoiceNo} onChange={e => handleFormChange('invoiceNo', e.target.value)} placeholder="Enter No." />
+                    <div className="form-group" style={{ backgroundColor: 'rgba(220, 38, 38, 0.05)', padding: '10px', borderRadius: '8px', border: '1px solid rgba(220, 38, 38, 0.2)' }}>
+                      <label style={{ color: '#dc2626' }}>Invoice No.</label>
+                      <input type="text" value={formData.invoiceNo} onChange={e => handleFormChange('invoiceNo', e.target.value)} placeholder="Enter No." style={{ borderColor: '#dc2626', color: '#dc2626', fontWeight: 'bold' }} />
                     </div>
                     <div className="form-group">
                       <label>Invoice Date</label>
@@ -339,9 +339,19 @@ const InvoiceForm: React.FC = () => {
               <input 
                 type="text" 
                 className="field-input" 
-                style={{ width: '120px', fontSize: '18px', fontWeight: 'bold', color: '#dc2626', borderBottom: 'none' }} 
+                style={{ 
+                  width: '120px', 
+                  fontSize: '18px', 
+                  fontWeight: 'bold', 
+                  color: '#dc2626', 
+                  border: '1px solid #dc2626',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  backgroundColor: 'rgba(220, 38, 38, 0.05)'
+                }} 
                 value={formData.invoiceNo} 
                 onChange={e => handleFormChange('invoiceNo', e.target.value)}
+                placeholder="No."
               />
               
               <div style={{ position: 'relative', width: '70px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
