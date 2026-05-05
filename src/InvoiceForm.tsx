@@ -455,25 +455,25 @@ const InvoiceForm: React.FC = () => {
             
             <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
               <div className="checkbox-group">
-                <div className="text-group">
+                <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <span style={{fontWeight: 'bold'}}>በጥሬ ገንዘብ/</span>
-                  <span>Cash</span>
+                  <span style={{marginLeft: '4px'}}>Cash</span>
                 </div>
                 <div className="check-box"></div>
               </div>
 
               <div className="checkbox-group" style={{ marginLeft: '30px' }}>
-                <div className="text-group">
+                <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <span style={{fontWeight: 'bold'}}>በቼክ/</span>
-                  <span>Check</span>
+                  <span style={{marginLeft: '4px'}}>Check</span>
                 </div>
                 <div className="check-box"></div>
               </div>
 
               <div className="field-row" style={{ flexGrow: 1, marginLeft: '30px' }}>
-                <div className="text-group">
+                <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <span style={{fontWeight: 'bold'}}>የቼክ ቁጥር/</span>
-                  <span>Check No.</span>
+                  <span style={{marginLeft: '4px'}}>Check No.</span>
                 </div>
                 <input className="field-input" type="text" />
               </div>
