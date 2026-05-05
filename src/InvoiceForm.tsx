@@ -388,9 +388,10 @@ const InvoiceForm: React.FC = () => {
 
         {/* Calculations */}
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            {/* Top 3 rows align with Unit Price column (65% spacer, 15% label area) */}
             <div style={{ display: 'flex', minHeight: '25px' }}>
-              <div style={{ width: '40%' }}></div>
-              <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
+              <div style={{ width: '65%' }}></div>
+              <div style={{ width: '15%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                 <span style={{ fontWeight: 'bold' }}>ሰርቪስ ቻርጅ ሐሳ/</span>
                 <span>Service Charge</span>
               </div>
@@ -400,8 +401,8 @@ const InvoiceForm: React.FC = () => {
             </div>
 
             <div style={{ display: 'flex', minHeight: '25px' }}>
-              <div style={{ width: '40%' }}></div>
-              <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
+              <div style={{ width: '65%' }}></div>
+              <div style={{ width: '15%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                 <span style={{ fontWeight: 'bold' }}>ድምር</span>
                 <span>Total</span>
               </div>
@@ -411,8 +412,8 @@ const InvoiceForm: React.FC = () => {
             </div>
 
             <div style={{ display: 'flex', minHeight: '25px' }}>
-              <div style={{ width: '40%' }}></div>
-              <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
+              <div style={{ width: '65%' }}></div>
+              <div style={{ width: '15%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                 <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ. /15%/</span>
                 <span>VAT</span>
               </div>
@@ -421,9 +422,10 @@ const InvoiceForm: React.FC = () => {
               </div>
             </div>
 
+            {/* Bottom row aligns with Qty column start (55% spacer, 25% label area) */}
             <div style={{ display: 'flex', minHeight: '40px' }}>
-              <div style={{ width: '40%' }}></div>
-              <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
+              <div style={{ width: '55%' }}></div>
+              <div style={{ width: '25%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                 <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ. ጨምሮ ጠቅላላ ዋጋ</span>
                 <span style={{ whiteSpace: 'nowrap' }}>Total Selling Price Including VAT</span>
               </div>
