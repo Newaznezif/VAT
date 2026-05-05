@@ -391,9 +391,9 @@ const InvoiceForm: React.FC = () => {
             {/* Top 3 rows align with Unit Price column (65% spacer, 15% label area) */}
             <div style={{ display: 'flex', minHeight: '25px' }}>
               <div style={{ width: '65%' }}></div>
-              <div style={{ width: '15%', paddingRight: '10px', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', whiteSpace: 'nowrap' }}>
+              <div style={{ width: '15%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                 <span style={{ fontWeight: 'bold' }}>ሰርቪስ ቻርጅ /ካለ/</span>
-                <span style={{ marginLeft: '4px' }}>Service Charge</span>
+                <span>Service Charge</span>
               </div>
               <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000' }}>
                  <input type="number" style={{ width: '100%', height: '100%', textAlign: 'center' }} value={serviceCharge} onChange={e => setServiceCharge(e.target.value === "" ? "" : Number(e.target.value))} />
