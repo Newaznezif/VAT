@@ -424,8 +424,8 @@ const InvoiceForm: React.FC = () => {
 
             {/* Bottom row aligns with Qty column start (55% spacer, 25% label area) */}
             <div style={{ display: 'flex', minHeight: '40px' }}>
-              <div style={{ width: '55%' }}></div>
-              <div style={{ width: '25%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
+              <div style={{ width: '50%' }}></div>
+              <div style={{ width: '30%', paddingRight: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                 <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ. ጨምሮ ጠቅላላ ዋጋ</span>
                 <span style={{ whiteSpace: 'nowrap' }}>Total Selling Price Including VAT</span>
               </div>
