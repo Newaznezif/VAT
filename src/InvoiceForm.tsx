@@ -447,34 +447,36 @@ const InvoiceForm: React.FC = () => {
             </div>
           </div>
 
-          <div className="payment-row">
-            <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center', whiteSpace: 'nowrap' }}>
+          <div className="payment-row" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center', whiteSpace: 'nowrap', marginBottom: '8px' }}>
               <span style={{fontWeight: 'bold'}}>የክፍያ ሁኔታ/</span>
               <span style={{marginLeft: '4px'}}>Mode of Payment</span>
             </div>
             
-            <div className="checkbox-group">
-              <div className="text-group">
-                <span style={{fontWeight: 'bold'}}>በጥሬ ገንዘብ/</span>
-                <span>Cash</span>
+            <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+              <div className="checkbox-group">
+                <div className="text-group">
+                  <span style={{fontWeight: 'bold'}}>በጥሬ ገንዘብ/</span>
+                  <span>Cash</span>
+                </div>
+                <div className="check-box"></div>
               </div>
-              <div className="check-box"></div>
-            </div>
 
-            <div className="checkbox-group">
-              <div className="text-group">
-                <span style={{fontWeight: 'bold'}}>በቼክ/</span>
-                <span>Check</span>
+              <div className="checkbox-group" style={{ marginLeft: '30px' }}>
+                <div className="text-group">
+                  <span style={{fontWeight: 'bold'}}>በቼክ/</span>
+                  <span>Check</span>
+                </div>
+                <div className="check-box"></div>
               </div>
-              <div className="check-box"></div>
-            </div>
 
-            <div className="field-row" style={{ flexGrow: 1, marginLeft: '20px' }}>
-              <div className="text-group">
-                <span style={{fontWeight: 'bold'}}>የቼክ ቁጥር/</span>
-                <span>Check No.</span>
+              <div className="field-row" style={{ flexGrow: 1, marginLeft: '30px' }}>
+                <div className="text-group">
+                  <span style={{fontWeight: 'bold'}}>የቼክ ቁጥር/</span>
+                  <span>Check No.</span>
+                </div>
+                <input className="field-input" type="text" />
               </div>
-              <input className="field-input" type="text" />
             </div>
           </div>
 
