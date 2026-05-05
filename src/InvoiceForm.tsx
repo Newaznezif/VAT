@@ -482,17 +482,17 @@ const InvoiceForm: React.FC = () => {
 
           <div className="signature-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', marginTop: '5px' }}>
             <div className="field-row" style={{ width: '55%' }}>
-              <div className="text-group" style={{ flexDirection: 'row', alignItems: 'baseline', whiteSpace: 'nowrap' }}>
+              <div className="text-group">
                 <span style={{fontWeight: 'bold'}}>ቫውቸር ቁጥር/</span>
-                <span style={{marginLeft: '4px'}}>Voucher No.</span>
+                <span>Voucher No.</span>
               </div>
               <input className="field-input" type="text" />
             </div>
 
             <div className="field-row" style={{ width: '40%' }}>
-              <div className="text-group" style={{ flexDirection: 'row', alignItems: 'baseline', whiteSpace: 'nowrap' }}>
+              <div className="text-group">
                 <span style={{fontWeight: 'bold'}}>የተቀባይ ስምና ፊርማ/</span>
-                <span style={{marginLeft: '4px'}}>Receiver Name & Signature</span>
+                <span>Receiver Name & Signature</span>
               </div>
               <input className="field-input" type="text" />
             </div>
