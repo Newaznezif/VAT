@@ -387,46 +387,43 @@ const InvoiceForm: React.FC = () => {
         </table>
 
         {/* Calculations */}
-        <div style={{ display: 'flex' }}>
-          <div style={{ flexGrow: 1 }}></div>
-          
-          <div style={{ width: '50%', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <div style={{ display: 'flex', minHeight: '30px' }}>
-              <div style={{ flexGrow: 1, paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <div style={{ flexGrow: 1, paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                 <span style={{ fontWeight: 'bold' }}>ሰርቪስ ቻርጅ ሐሳ/</span>
                 <span>Service Charge</span>
               </div>
-              <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000' }}>
+              <div style={{ width: '35%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000' }}>
                  <input type="number" style={{ width: '100%', height: '100%', textAlign: 'center' }} value={serviceCharge} onChange={e => setServiceCharge(e.target.value === "" ? "" : Number(e.target.value))} />
               </div>
             </div>
 
             <div style={{ display: 'flex', minHeight: '30px' }}>
-              <div style={{ flexGrow: 1, paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <div style={{ flexGrow: 1, paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                 <span style={{ fontWeight: 'bold' }}>ድምር</span>
                 <span>Total</span>
               </div>
-              <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '35%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {totalWithService > 0 && totalWithService.toLocaleString()}
               </div>
             </div>
 
             <div style={{ display: 'flex', minHeight: '30px' }}>
-              <div style={{ flexGrow: 1, paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <div style={{ flexGrow: 1, paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                 <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ.  15%/</span>
                 <span>VAT</span>
               </div>
-              <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '35%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {vat > 0 && vat.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
               </div>
             </div>
 
             <div style={{ display: 'flex', minHeight: '40px' }}>
-              <div style={{ flexGrow: 1, paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <div style={{ flexGrow: 1, paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                 <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ. ጨምሮ ጠቅላላ ዋጋ</span>
                 <span style={{ whiteSpace: 'nowrap' }}>Total Selling Price Including VAT</span>
               </div>
-              <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+              <div style={{ width: '35%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
                 {grandTotal > 0 && grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
               </div>
             </div>
