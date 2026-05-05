@@ -448,9 +448,9 @@ const InvoiceForm: React.FC = () => {
           </div>
 
           <div className="payment-row">
-            <div className="text-group">
+            <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center', whiteSpace: 'nowrap' }}>
               <span style={{fontWeight: 'bold'}}>የክፍያ ሁኔታ/</span>
-              <span>Mode of Payment</span>
+              <span style={{marginLeft: '4px'}}>Mode of Payment</span>
             </div>
             
             <div className="checkbox-group">
