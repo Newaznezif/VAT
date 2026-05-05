@@ -396,7 +396,7 @@ const InvoiceForm: React.FC = () => {
                 <span style={{ fontWeight: 'bold' }}>ሰርቪስ ቻርጅ ሐሳ/</span>
                 <span>Service Charge</span>
               </div>
-              <div style={{ width: '45%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000' }}>
+              <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000' }}>
                  <input type="number" style={{ width: '100%', height: '100%', textAlign: 'center' }} value={serviceCharge} onChange={e => setServiceCharge(e.target.value === "" ? "" : Number(e.target.value))} />
               </div>
             </div>
@@ -406,7 +406,7 @@ const InvoiceForm: React.FC = () => {
                 <span style={{ fontWeight: 'bold' }}>ድምር</span>
                 <span>Total</span>
               </div>
-              <div style={{ width: '45%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {totalWithService > 0 && totalWithService.toLocaleString()}
               </div>
             </div>
@@ -416,7 +416,7 @@ const InvoiceForm: React.FC = () => {
                 <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ.  15%/</span>
                 <span>VAT</span>
               </div>
-              <div style={{ width: '45%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {vat > 0 && vat.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
               </div>
             </div>
@@ -426,7 +426,7 @@ const InvoiceForm: React.FC = () => {
                 <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ. ጨምሮ ጠቅላላ ዋጋ</span>
                 <span style={{ whiteSpace: 'nowrap' }}>Total Selling Price Including VAT</span>
               </div>
-              <div style={{ width: '45%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+              <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
                 {grandTotal > 0 && grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
               </div>
             </div>
