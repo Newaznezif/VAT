@@ -15,6 +15,38 @@ const InvoiceForm: React.FC = () => {
   const [qrValue, setQrValue] = useState('');
   const [showQrModal, setShowQrModal] = useState(false);
   const [tempQrInput, setTempQrInput] = useState('');
+  const [showQuickFill, setShowQuickFill] = useState(false);
+  const [formData, setFormData] = useState({
+    invoiceNo: '',
+    invoiceDate: '',
+    fromName: '',
+    fromTradeName: '',
+    fromCity: 'OROMIA',
+    fromZone: 'JIMMA ZONE',
+    fromWoreda: 'JIMMA CITY ADMIN',
+    fromKebele: 'H E R M A T A',
+    fromHNo: '0 3 9',
+    fromTele: '',
+    fromTIN: '0022852002',
+    fromVATNo: '9489910009',
+    fromVATDate: '2015-09-12 00:00:00',
+    toName: '',
+    toCity: '',
+    toZone: '',
+    toWoreda: '',
+    toKebele: '',
+    toHNo: '',
+    toTIN: '',
+    toVATNo: '',
+    toVATDate: '',
+    checkNo: '',
+    voucherNo: '',
+    receiverName: '',
+  });
+
+  const handleFormChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
   
   const calculateTotal = (qty: number | string, price: number | string) => {
     if (qty === '' || price === '') return 0;
@@ -129,7 +161,126 @@ const InvoiceForm: React.FC = () => {
         <button className="btn" onClick={exportWord} style={{backgroundColor: '#10b981'}}>Export to Word</button>
         <button className="btn" onClick={() => window.print()} style={{backgroundColor: '#fff', color: '#2563eb', border: '1px solid #2563eb'}}>Print</button>
         <button className="btn" onClick={() => setShowQrModal(true)} style={{backgroundColor: '#6366f1', color: '#fff'}}>Generate QR</button>
+        <button className="btn" onClick={() => setShowQuickFill(true)} style={{backgroundColor: '#f59e0b', color: '#fff'}}>Quick Fill Form</button>
       </div>
+
+      {showQuickFill && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+          backgroundColor: 'rgba(15, 23, 42, 0.75)', backdropFilter: 'blur(4px)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 2000
+        }}>
+          <div style={{
+            backgroundColor: 'white', padding: '0', borderRadius: '16px', width: '95%', maxWidth: '900px',
+            maxHeight: '90vh', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
+            display: 'flex', flexDirection: 'column'
+          }}>
+            <div style={{ 
+              padding: '20px 30px', 
+              background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)', 
+              color: 'white',
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center' 
+            }}>
+              <div>
+                <h2 style={{ margin: 0, fontSize: '1.5rem' }}>Invoice Data Form</h2>
+                <p style={{ margin: '4px 0 0 0', opacity: 0.8, fontSize: '0.875rem' }}>Fill in the details below to update the invoice</p>
+              </div>
+              <button onClick={() => setShowQuickFill(false)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer', fontSize: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>&times;</button>
+            </div>
+            
+            <div style={{ padding: '30px', overflowY: 'auto', flexGrow: 1 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px' }}>
+                <section>
+                  <h3 style={{ borderBottom: '2px solid #3b82f6', paddingBottom: '10px', color: '#1e3a8a', marginBottom: '20px', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ background: '#3b82f6', color: 'white', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem' }}>1</span>
+                    Basic Information
+                  </h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                    <div className="form-group">
+                      <label>Invoice No.</label>
+                      <input type="text" value={formData.invoiceNo} onChange={e => handleFormChange('invoiceNo', e.target.value)} placeholder="Enter No." />
+                    </div>
+                    <div className="form-group">
+                      <label>Invoice Date</label>
+                      <input type="date" value={formData.invoiceDate} onChange={e => handleFormChange('invoiceDate', e.target.value)} />
+                    </div>
+                  </div>
+                  
+                  <div style={{ marginTop: '20px' }}>
+                    <h4 style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '15px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Supplier Details (From)</h4>
+                    <div className="form-group"><label>Supplier Name</label><input type="text" value={formData.fromName} onChange={e => handleFormChange('fromName', e.target.value)} /></div>
+                    <div className="form-group"><label>Trade Name</label><input type="text" value={formData.fromTradeName} onChange={e => handleFormChange('fromTradeName', e.target.value)} /></div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                      <div className="form-group"><label>City</label><input type="text" value={formData.fromCity} onChange={e => handleFormChange('fromCity', e.target.value)} /></div>
+                      <div className="form-group"><label>Zone</label><input type="text" value={formData.fromZone} onChange={e => handleFormChange('fromZone', e.target.value)} /></div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                      <div className="form-group"><label>Woreda</label><input type="text" value={formData.fromWoreda} onChange={e => handleFormChange('fromWoreda', e.target.value)} /></div>
+                      <div className="form-group"><label>Kebele</label><input type="text" value={formData.fromKebele} onChange={e => handleFormChange('fromKebele', e.target.value)} /></div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '10px' }}>
+                      <div className="form-group"><label>H.No.</label><input type="text" value={formData.fromHNo} onChange={e => handleFormChange('fromHNo', e.target.value)} /></div>
+                      <div className="form-group"><label>Telephone</label><input type="text" value={formData.fromTele} onChange={e => handleFormChange('fromTele', e.target.value)} /></div>
+                    </div>
+                    <div className="form-group"><label>Supplier TIN</label><input type="text" value={formData.fromTIN} onChange={e => handleFormChange('fromTIN', e.target.value)} /></div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                      <div className="form-group"><label>VAT No</label><input type="text" value={formData.fromVATNo} onChange={e => handleFormChange('fromVATNo', e.target.value)} /></div>
+                      <div className="form-group"><label>VAT Reg Date</label><input type="text" value={formData.fromVATDate} onChange={e => handleFormChange('fromVATDate', e.target.value)} /></div>
+                    </div>
+                  </div>
+                </section>
+
+                <section>
+                  <h3 style={{ borderBottom: '2px solid #3b82f6', paddingBottom: '10px', color: '#1e3a8a', marginBottom: '20px', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ background: '#3b82f6', color: 'white', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem' }}>2</span>
+                    Customer & Payment
+                  </h3>
+                  
+                  <div className="form-group"><label>Customer Name</label><input type="text" value={formData.toName} onChange={e => handleFormChange('toName', e.target.value)} /></div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <div className="form-group"><label>City</label><input type="text" value={formData.toCity} onChange={e => handleFormChange('toCity', e.target.value)} /></div>
+                    <div className="form-group"><label>Zone</label><input type="text" value={formData.toZone} onChange={e => handleFormChange('toZone', e.target.value)} /></div>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+                    <div className="form-group"><label>Woreda</label><input type="text" value={formData.toWoreda} onChange={e => handleFormChange('toWoreda', e.target.value)} /></div>
+                    <div className="form-group"><label>Kebele</label><input type="text" value={formData.toKebele} onChange={e => handleFormChange('toKebele', e.target.value)} /></div>
+                    <div className="form-group"><label>H.No.</label><input type="text" value={formData.toHNo} onChange={e => handleFormChange('toHNo', e.target.value)} /></div>
+                  </div>
+                  <div className="form-group"><label>Customer TIN</label><input type="text" value={formData.toTIN} onChange={e => handleFormChange('toTIN', e.target.value)} /></div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <div className="form-group"><label>Customer VAT No</label><input type="text" value={formData.toVATNo} onChange={e => handleFormChange('toVATNo', e.target.value)} /></div>
+                    <div className="form-group"><label>VAT Reg Date</label><input type="text" value={formData.toVATDate} onChange={e => handleFormChange('toVATDate', e.target.value)} /></div>
+                  </div>
+
+                  <div style={{ marginTop: '30px' }}>
+                    <h4 style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '15px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Payment Info</h4>
+                    <div className="form-group">
+                      <label>Service Charge (if any)</label>
+                      <input type="number" value={serviceCharge} onChange={e => setServiceCharge(e.target.value === "" ? "" : Number(e.target.value))} />
+                    </div>
+                    <div className="form-group">
+                      <label>Check Number (if payment by check)</label>
+                      <input type="text" value={formData.checkNo} onChange={e => handleFormChange('checkNo', e.target.value)} />
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                      <div className="form-group"><label>Voucher No.</label><input type="text" value={formData.voucherNo} onChange={e => handleFormChange('voucherNo', e.target.value)} /></div>
+                      <div className="form-group"><label>Receiver Name</label><input type="text" value={formData.receiverName} onChange={e => handleFormChange('receiverName', e.target.value)} /></div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <div style={{ padding: '20px 30px', borderTop: '1px solid #f1f5f9', background: '#f8fafc', display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
+              <button className="btn" onClick={() => setShowQuickFill(false)} style={{ background: '#64748b', color: 'white' }}>Cancel</button>
+              <button className="btn" onClick={() => setShowQuickFill(false)} style={{ background: '#3b82f6', color: 'white' }}>Save & View Invoice</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showQrModal && (
         <div style={{
@@ -179,25 +330,32 @@ const InvoiceForm: React.FC = () => {
         {/* Header */}
         <div className="header-container">
           <div className="header-left">
-            <div className="invoice-no-row" style={{ alignItems: 'flex-start' }}>
+            <div className="invoice-no-row" style={{ alignItems: 'flex-start', gap: '15px' }}>
               <div className="text-group">
                 <span>የደረሰኝ ቁጥር</span>
                 <span>Invoice No.</span>
               </div>
+              <input 
+                type="text" 
+                className="field-input" 
+                style={{ width: '120px', fontSize: '18px', fontWeight: 'bold', color: '#dc2626', borderBottom: 'none' }} 
+                value={formData.invoiceNo} 
+                onChange={e => handleFormChange('invoiceNo', e.target.value)}
+              />
               
-              <div style={{ position: 'relative', marginLeft: '20px', width: '70px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ position: 'relative', width: '70px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ position: 'absolute', top: 0, left: '0px', width: '10px', height: '10px', borderTop: '2px solid black', borderLeft: '2px solid black' }}></div>
                 <div style={{ position: 'absolute', top: 0, left: '60px', width: '10px', height: '10px', borderTop: '2px solid black', borderRight: '2px solid black' }}></div>
                 <div style={{ position: 'absolute', top: '60px', left: '0px', width: '10px', height: '10px', borderBottom: '2px solid black', borderLeft: '2px solid black' }}></div>
                 <div style={{ position: 'absolute', top: '60px', left: '60px', width: '10px', height: '10px', borderBottom: '2px solid black', borderRight: '2px solid black' }}></div>
                 
                 {qrValue ? (
-                  <QRCodeCanvas value={qrValue} size={50} />
+                  <QRCodeCanvas value={qrValue} size={70} />
                 ) : (
-                  <div style={{ width: '40px', height: '40px', position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: 0, left: 0, width: '10px', height: '10px', background: 'black', outline: '2px solid var(--invoice-bg)', outlineOffset: '-4px' }}></div>
-                    <div style={{ position: 'absolute', top: 0, right: 0, width: '10px', height: '10px', background: 'black', outline: '2px solid var(--invoice-bg)', outlineOffset: '-4px' }}></div>
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '10px', height: '10px', background: 'black', outline: '2px solid var(--invoice-bg)', outlineOffset: '-4px' }}></div>
+                  <div style={{ width: '60px', height: '60px', position: 'relative' }}>
+                    <div style={{ position: 'absolute', top: 0, left: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
+                    <div style={{ position: 'absolute', top: 0, right: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
                   </div>
                 )}
               </div>
@@ -214,7 +372,7 @@ const InvoiceForm: React.FC = () => {
             <div className="text-group" style={{ alignItems: 'flex-start', display: 'inline-flex' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '5px' }}>
                 <span style={{ fontWeight: 'bold' }}>ቀን</span>
-                <input type="date" style={{ borderBottom: '1px solid black', width: '120px' }} />
+                <input type="date" value={formData.invoiceDate} onChange={e => handleFormChange('invoiceDate', e.target.value)} style={{ borderBottom: '1px solid black', width: '120px' }} />
               </div>
               <span>Invoice Date</span>
             </div>
@@ -230,7 +388,7 @@ const InvoiceForm: React.FC = () => {
                 <span style={{ fontWeight: 'bold' }}>ከ</span>
                 <span>From:</span>
               </div>
-              <input className="field-input" type="text" />
+              <input className="field-input" type="text" value={formData.fromName} onChange={e => handleFormChange('fromName', e.target.value)} />
             </div>
             
             <div className="field-row">
@@ -238,7 +396,7 @@ const InvoiceForm: React.FC = () => {
                 <span>የንግድ ስም ስያሜ</span>
                 <span>Trade Name</span>
               </div>
-              <input className="field-input" type="text" />
+              <input className="field-input" type="text" value={formData.fromTradeName} onChange={e => handleFormChange('fromTradeName', e.target.value)} />
             </div>
 
             <div className="field-row" style={{ marginBottom: '18px' }}>
@@ -246,13 +404,13 @@ const InvoiceForm: React.FC = () => {
                 <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>አድራሻ፡ ከተማ</span>
                 <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Address City/Town</span>
               </div>
-              <div style={{ flexGrow: 1, borderBottom: '1px solid #000', margin: '0 5px', textAlign: 'center' }}>OROMIA</div>
+              <input type="text" className="field-input" style={{ margin: '0 5px', textAlign: 'center' }} value={formData.fromCity} onChange={e => handleFormChange('fromCity', e.target.value)} />
               
               <div style={{ position: 'relative' }}>
                 <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ዞን/ክ/ከተማ</span>
                 <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Zone/ Sub-City</span>
               </div>
-              <div style={{ flexGrow: 1, borderBottom: '1px solid #000', margin: '0 0 0 5px', textAlign: 'center', whiteSpace: 'nowrap' }}>JIMMA ZONE</div>
+              <input type="text" className="field-input" style={{ margin: '0 0 0 5px', textAlign: 'center' }} value={formData.fromZone} onChange={e => handleFormChange('fromZone', e.target.value)} />
             </div>
 
             <div className="field-row" style={{ marginBottom: '18px' }}>
@@ -260,13 +418,13 @@ const InvoiceForm: React.FC = () => {
                 <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ወረዳ</span>
                 <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Woreda</span>
               </div>
-              <div style={{ flexGrow: 1, borderBottom: '1px solid #000', margin: '0 5px', textAlign: 'center', fontSize: '11px' }}>JIMMA CITY ADMIN</div>
+              <input type="text" className="field-input" style={{ margin: '0 5px', textAlign: 'center' }} value={formData.fromWoreda} onChange={e => handleFormChange('fromWoreda', e.target.value)} />
               
               <div style={{ position: 'relative' }}>
                 <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ቀበሌ</span>
                 <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Kebele</span>
               </div>
-              <div style={{ flexGrow: 1, borderBottom: '1px solid #000', margin: '0 0 0 5px', textAlign: 'center', whiteSpace: 'nowrap' }}>H E R M A T A</div>
+              <input type="text" className="field-input" style={{ margin: '0 0 0 5px', textAlign: 'center' }} value={formData.fromKebele} onChange={e => handleFormChange('fromKebele', e.target.value)} />
             </div>
 
             <div className="field-row" style={{ marginBottom: '18px' }}>
@@ -274,13 +432,13 @@ const InvoiceForm: React.FC = () => {
                 <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>የቤት.ቁ</span>
                 <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>H.No.</span>
               </div>
-              <div style={{ width: '50px', borderBottom: '1px solid #000', margin: '0 5px', textAlign: 'center' }}>0 3 9</div>
+              <input type="text" className="field-input" style={{ width: '50px', flexGrow: 0, margin: '0 5px', textAlign: 'center' }} value={formData.fromHNo} onChange={e => handleFormChange('fromHNo', e.target.value)} />
               
               <div style={{ position: 'relative' }}>
                 <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ስልክ</span>
                 <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Tele</span>
               </div>
-              <input type="text" className="field-input" style={{ marginLeft: '5px' }} />
+              <input type="text" className="field-input" style={{ marginLeft: '5px' }} value={formData.fromTele} onChange={e => handleFormChange('fromTele', e.target.value)} />
             </div>
 
             <div className="field-row">
@@ -288,9 +446,7 @@ const InvoiceForm: React.FC = () => {
                 <span>የሻጭ የግብር ከፋይ መለያ ቁጥር</span>
                 <span>Supplier's TIN</span>
               </div>
-              <div className="field-input-static" style={{ flexGrow: 1 }}>
-                 <span style={{ marginLeft: '10px' }}>0022852002</span>
-              </div>
+              <input type="text" className="field-input" value={formData.fromTIN} onChange={e => handleFormChange('fromTIN', e.target.value)} />
             </div>
 
             <div className="field-row">
@@ -298,9 +454,7 @@ const InvoiceForm: React.FC = () => {
                 <span>የሻጭ የተ.እ.ታ. ቁጥር</span>
                 <span>Supplier's VAT Reg. No.</span>
               </div>
-              <div className="field-input-static" style={{ flexGrow: 1 }}>
-                 <span style={{ marginLeft: '10px' }}>9489910009</span>
-              </div>
+              <input type="text" className="field-input" value={formData.fromVATNo} onChange={e => handleFormChange('fromVATNo', e.target.value)} />
             </div>
 
             <div className="field-row">
@@ -308,9 +462,7 @@ const InvoiceForm: React.FC = () => {
                 <span>ለተ.እ.ታ. የተመዘገበበት ቀን</span>
                 <span>Date of VAT Registration</span>
               </div>
-              <div className="field-input-static" style={{ flexGrow: 1 }}>
-                 <span style={{ marginLeft: '10px' }}>2015-09-12 00:00:00</span>
-              </div>
+              <input type="text" className="field-input" value={formData.fromVATDate} onChange={e => handleFormChange('fromVATDate', e.target.value)} />
             </div>
           </div>
 
@@ -321,7 +473,7 @@ const InvoiceForm: React.FC = () => {
                 <span style={{ fontWeight: 'bold' }}>ለ</span>
                 <span>To</span>
               </div>
-              <input className="field-input" type="text" />
+              <input className="field-input" type="text" value={formData.toName} onChange={e => handleFormChange('toName', e.target.value)} />
             </div>
 
             <div className="field-row" style={{ marginBottom: '18px' }}>
@@ -329,13 +481,13 @@ const InvoiceForm: React.FC = () => {
                 <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>አድራሻ፡ ከተማ</span>
                 <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Address City/Town</span>
               </div>
-              <input className="field-input" type="text" style={{width: '100px', flexGrow: 0}} />
+              <input className="field-input" type="text" style={{width: '100px', flexGrow: 0, margin: '0 5px'}} value={formData.toCity} onChange={e => handleFormChange('toCity', e.target.value)} />
               
               <div style={{ position: 'relative', marginLeft: '10px' }}>
                 <span style={{ whiteSpace: 'nowrap' }}>ዞን/ክ/ከተማ</span>
                 <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Zone/ Sub-City</span>
               </div>
-              <input className="field-input" type="text" />
+              <input className="field-input" type="text" value={formData.toZone} onChange={e => handleFormChange('toZone', e.target.value)} />
             </div>
 
             <div className="field-row" style={{ marginBottom: '18px' }}>
@@ -343,19 +495,19 @@ const InvoiceForm: React.FC = () => {
                 <span style={{ whiteSpace: 'nowrap' }}>ወረዳ</span>
                 <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Woreda</span>
               </div>
-              <input className="field-input" type="text" style={{width: '60px', flexGrow: 0}} />
+              <input className="field-input" type="text" style={{width: '60px', flexGrow: 0, margin: '0 5px'}} value={formData.toWoreda} onChange={e => handleFormChange('toWoreda', e.target.value)} />
               
               <div style={{ position: 'relative', marginLeft: '10px' }}>
                 <span style={{ whiteSpace: 'nowrap' }}>ቀበሌ</span>
                 <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Kebele</span>
               </div>
-              <input className="field-input" type="text" style={{width: '60px', flexGrow: 0}} />
+              <input className="field-input" type="text" style={{width: '60px', flexGrow: 0, margin: '0 5px'}} value={formData.toKebele} onChange={e => handleFormChange('toKebele', e.target.value)} />
 
               <div style={{ position: 'relative', marginLeft: '10px' }}>
                 <span style={{ whiteSpace: 'nowrap' }}>የቤት.ቁ</span>
                 <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>H.No.</span>
               </div>
-              <input className="field-input" type="text" />
+              <input className="field-input" type="text" value={formData.toHNo} onChange={e => handleFormChange('toHNo', e.target.value)} />
             </div>
 
             <div className="field-row" style={{marginTop: '22px'}}>
@@ -363,7 +515,7 @@ const InvoiceForm: React.FC = () => {
                 <span>የገዢ የግብር ከፋይ መለያ ቁጥር</span>
                 <span>Customer's TIN</span>
               </div>
-              <input className="field-input" type="text" />
+              <input className="field-input" type="text" value={formData.toTIN} onChange={e => handleFormChange('toTIN', e.target.value)} />
             </div>
 
             <div className="field-row">
@@ -371,7 +523,7 @@ const InvoiceForm: React.FC = () => {
                 <span>የገዢ የተ.እ.ታ. ቁጥር /ካለው/</span>
                 <span>Customer's VAT Reg. No.</span>
               </div>
-              <input className="field-input" type="text" />
+              <input className="field-input" type="text" value={formData.toVATNo} onChange={e => handleFormChange('toVATNo', e.target.value)} />
             </div>
 
             <div className="field-row">
@@ -379,7 +531,7 @@ const InvoiceForm: React.FC = () => {
                 <span>ለተ.እ.ታ. የተመዘገበበት ቀን</span>
                 <span>Date of VAT Registration</span>
               </div>
-              <input className="field-input" type="text" />
+              <input className="field-input" type="text" value={formData.toVATDate} onChange={e => handleFormChange('toVATDate', e.target.value)} />
             </div>
           </div>
         </div>
@@ -525,7 +677,7 @@ const InvoiceForm: React.FC = () => {
                   <span style={{fontWeight: 'bold'}}>የቼክ ቁጥር/</span>
                   <span style={{marginLeft: '4px'}}>Check No.</span>
                 </div>
-                <input className="field-input" type="text" />
+                <input className="field-input" type="text" value={formData.checkNo} onChange={e => handleFormChange('checkNo', e.target.value)} />
               </div>
             </div>
           </div>
@@ -536,7 +688,7 @@ const InvoiceForm: React.FC = () => {
                 <span style={{fontWeight: 'bold'}}>ቫውቸር ቁጥር/</span>
                 <span>Voucher No.</span>
               </div>
-              <input className="field-input" type="text" />
+              <input className="field-input" type="text" value={formData.voucherNo} onChange={e => handleFormChange('voucherNo', e.target.value)} />
             </div>
 
             <div className="field-row" style={{ width: '40%' }}>
@@ -544,7 +696,7 @@ const InvoiceForm: React.FC = () => {
                 <span style={{fontWeight: 'bold'}}>የተቀባይ ስምና ፊርማ/</span>
                 <span>Receiver Name & Signature</span>
               </div>
-              <input className="field-input" type="text" />
+              <input className="field-input" type="text" value={formData.receiverName} onChange={e => handleFormChange('receiverName', e.target.value)} />
             </div>
           </div>
 

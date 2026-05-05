@@ -235,6 +235,19 @@ input {
   margin-left: 5px;
   min-height: 16px;
   min-width: 0;
+  transition: background-color 0.2s ease;
+  padding: 0 2px;
+}
+
+.field-input:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+  cursor: text;
+}
+
+.field-input:focus {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-bottom: 2px solid #3b82f6;
+  outline: none;
 }
 
 .field-input-static {
@@ -415,4 +428,24 @@ input {
     box-shadow: none;
     margin: 0;
   }
+}
+
+.form-group {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.form-group input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
 }
