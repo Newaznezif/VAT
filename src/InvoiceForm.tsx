@@ -470,7 +470,7 @@ const InvoiceForm: React.FC = () => {
                 <div className="check-box"></div>
               </div>
 
-              <div className="field-row" style={{ flexGrow: 1, marginLeft: '30px' }}>
+              <div className="field-row" style={{ flexGrow: 1, marginLeft: '30px', maxWidth: '75%' }}>
                 <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <span style={{fontWeight: 'bold'}}>የቼክ ቁጥር/</span>
                   <span style={{marginLeft: '4px'}}>Check No.</span>
