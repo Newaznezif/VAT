@@ -390,7 +390,7 @@ const InvoiceForm: React.FC = () => {
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <div style={{ display: 'flex', minHeight: '30px' }}>
               <div style={{ width: '40%' }}></div>
-              <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
+              <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
                 <span style={{ fontWeight: 'bold' }}>ሰርቪስ ቻርጅ ሐሳ/</span>
                 <span>Service Charge</span>
               </div>
@@ -401,7 +401,7 @@ const InvoiceForm: React.FC = () => {
 
             <div style={{ display: 'flex', minHeight: '30px' }}>
               <div style={{ width: '40%' }}></div>
-              <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
+              <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
                 <span style={{ fontWeight: 'bold' }}>ድምር</span>
                 <span>Total</span>
               </div>
@@ -412,7 +412,7 @@ const InvoiceForm: React.FC = () => {
 
             <div style={{ display: 'flex', minHeight: '30px' }}>
               <div style={{ width: '40%' }}></div>
-              <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
+              <div style={{ width: '40%', paddingRight: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
                 <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ.  15%/</span>
                 <span>VAT</span>
               </div>
