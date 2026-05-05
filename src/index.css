@@ -55,6 +55,7 @@ body {
   position: relative;
   font-size: 14px;
   line-height: 1.2;
+  font-weight: bold;
 }
 
 .vertical-sidebar {
@@ -76,6 +77,7 @@ body {
 input {
   font-family: inherit;
   font-size: inherit;
+  font-weight: inherit;
   background: transparent;
   border: none;
   outline: none;

@@ -54,36 +54,66 @@ const InvoiceForm: React.FC = () => {
     }
   };
 
-  const exportWord = async () => {
+  const exportWord = () => {
     if (!invoiceRef.current) return;
     try {
-      const canvas = await html2canvas(invoiceRef.current, { scale: 2 });
+      const clone = invoiceRef.current.cloneNode(true) as HTMLElement;
       
-      const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/png'));
-      if (!blob) throw new Error("Could not generate image blob");
-      const arrayBuffer = await blob.arrayBuffer();
+      // Replace all inputs with their current values
+      const originalInputs = invoiceRef.current.querySelectorAll('input');
+      const clonedInputs = clone.querySelectorAll('input');
       
-      const doc = new Document({
-        sections: [{
-          properties: {},
-          children: [
-            new Paragraph({
-              children: [
-                new ImageRun({
-                  data: arrayBuffer,
-                  transformation: {
-                    width: 700, 
-                    height: (canvas.height * 700) / canvas.width,
-                  },
-                }),
-              ],
-            }),
-          ],
-        }],
+      originalInputs.forEach((input, index) => {
+        const span = document.createElement('span');
+        span.innerText = input.value || '\u00A0';
+        span.style.cssText = input.style.cssText;
+        span.style.display = 'inline-block';
+        span.style.minWidth = '50px';
+        if (input.className.includes('field-input')) {
+           span.style.borderBottom = '1px solid #000';
+        }
+        clonedInputs[index].parentNode?.replaceChild(span, clonedInputs[index]);
       });
 
-      const docBlob = await Packer.toBlob(doc);
-      saveAs(docBlob, "Invoice.docx");
+      // Inject Word-compatible CSS to mimic the browser layout
+      const header = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+          <meta charset='utf-8'>
+          <title>Invoice</title>
+          <!--[if gte mso 9]>
+          <xml>
+            <w:WordDocument>
+              <w:View>Print</w:View>
+              <w:Zoom>100</w:Zoom>
+              <w:DoNotOptimizeForBrowser/>
+            </w:WordDocument>
+          </xml>
+          <![endif]-->
+          <style>
+            body { font-family: 'Times New Roman', serif; font-weight: bold; }
+            .invoice-wrapper { width: 100%; max-width: 800px; margin: 0 auto; }
+            .header-container { display: table; width: 100%; margin-bottom: 20px; }
+            .header-left, .header-right { display: table-cell; vertical-align: top; }
+            .address-container { display: table; width: 100%; border-spacing: 20px 0; }
+            .address-block { display: table-cell; width: 45%; vertical-align: top; }
+            .field-row { display: table; width: 100%; margin-bottom: 10px; }
+            .invoice-table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+            .invoice-table th, .invoice-table td { border: 1px solid black; padding: 8px; text-align: left; }
+            .calculations-container { display: table; width: 100%; }
+            .calc-labels { display: table-cell; width: 60%; text-align: right; padding-right: 15px; }
+            .calc-values { display: table-cell; width: 40%; border: 1px solid black; }
+            .footer-section { margin-top: 30px; }
+            .vertical-sidebar { display: none; } /* Margin text is handled via Word Page Headers usually */
+          </style>
+        </head>
+        <body>
+      `;
+      const footer = "</body></html>";
+      
+      const sourceHTML = header + clone.outerHTML + footer;
+      const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
+      saveAs(blob, 'VAT_Invoice_Editable.doc');
     } catch (error) {
       console.error(error);
     }
