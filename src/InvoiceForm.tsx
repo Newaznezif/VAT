@@ -3,6 +3,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { toWords } from 'number-to-words';
 import { saveAs } from 'file-saver';
+import { QRCodeCanvas } from 'qrcode.react';
 
 const InvoiceForm: React.FC = () => {
   const invoiceRef = useRef<HTMLDivElement>(null);
@@ -11,6 +12,9 @@ const InvoiceForm: React.FC = () => {
   })));
 
   const [serviceCharge, setServiceCharge] = useState<number | ''>('');
+  const [qrValue, setQrValue] = useState('');
+  const [showQrModal, setShowQrModal] = useState(false);
+  const [tempQrInput, setTempQrInput] = useState('');
   
   const calculateTotal = (qty: number | string, price: number | string) => {
     if (qty === '' || price === '') return 0;
@@ -124,7 +128,47 @@ const InvoiceForm: React.FC = () => {
         <button className="btn" onClick={exportPDF}>Export to PDF</button>
         <button className="btn" onClick={exportWord} style={{backgroundColor: '#10b981'}}>Export to Word</button>
         <button className="btn" onClick={() => window.print()} style={{backgroundColor: '#fff', color: '#2563eb', border: '1px solid #2563eb'}}>Print</button>
+        <button className="btn" onClick={() => setShowQrModal(true)} style={{backgroundColor: '#6366f1', color: '#fff'}}>Generate QR</button>
       </div>
+
+      {showQrModal && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+          backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: 'white', padding: '25px', borderRadius: '12px', width: '400px',
+            boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)'
+          }}>
+            <h3 style={{ marginTop: 0, marginBottom: '15px' }}>Generate QR Code</h3>
+            <p style={{ fontSize: '14px', color: '#666', marginBottom: '15px' }}>Enter text, a link, or a TIN number to generate the invoice QR code.</p>
+            <input 
+              type="text" 
+              value={tempQrInput}
+              onChange={(e) => setTempQrInput(e.target.value)}
+              placeholder="Enter content..."
+              style={{
+                width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ddd',
+                marginBottom: '20px', boxSizing: 'border-box'
+              }}
+            />
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+              <button 
+                onClick={() => setShowQrModal(false)}
+                style={{ padding: '8px 16px', border: 'none', background: '#eee', borderRadius: '6px', cursor: 'pointer' }}
+              >Cancel</button>
+              <button 
+                onClick={() => {
+                  setQrValue(tempQrInput);
+                  setShowQrModal(false);
+                }}
+                style={{ padding: '8px 16px', border: 'none', background: '#6366f1', color: 'white', borderRadius: '6px', cursor: 'pointer' }}
+              >Generate</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="invoice-wrapper" ref={invoiceRef}>
         {/* Vertical Left Sidebar */}
@@ -141,15 +185,21 @@ const InvoiceForm: React.FC = () => {
                 <span>Invoice No.</span>
               </div>
               
-              <div style={{ position: 'relative', marginLeft: '20px', width: '70px', height: '70px' }}>
+              <div style={{ position: 'relative', marginLeft: '20px', width: '70px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ position: 'absolute', top: 0, left: '0px', width: '10px', height: '10px', borderTop: '2px solid black', borderLeft: '2px solid black' }}></div>
                 <div style={{ position: 'absolute', top: 0, left: '60px', width: '10px', height: '10px', borderTop: '2px solid black', borderRight: '2px solid black' }}></div>
                 <div style={{ position: 'absolute', top: '60px', left: '0px', width: '10px', height: '10px', borderBottom: '2px solid black', borderLeft: '2px solid black' }}></div>
                 <div style={{ position: 'absolute', top: '60px', left: '60px', width: '10px', height: '10px', borderBottom: '2px solid black', borderRight: '2px solid black' }}></div>
                 
-                <div style={{ position: 'absolute', top: '10px', left: '10px', width: '10px', height: '10px', background: 'black', outline: '2px solid var(--invoice-bg)', outlineOffset: '-4px' }}></div>
-                <div style={{ position: 'absolute', top: '10px', left: '50px', width: '10px', height: '10px', background: 'black', outline: '2px solid var(--invoice-bg)', outlineOffset: '-4px' }}></div>
-                <div style={{ position: 'absolute', top: '50px', left: '10px', width: '10px', height: '10px', background: 'black', outline: '2px solid var(--invoice-bg)', outlineOffset: '-4px' }}></div>
+                {qrValue ? (
+                  <QRCodeCanvas value={qrValue} size={50} />
+                ) : (
+                  <div style={{ width: '40px', height: '40px', position: 'relative' }}>
+                    <div style={{ position: 'absolute', top: 0, left: 0, width: '10px', height: '10px', background: 'black', outline: '2px solid var(--invoice-bg)', outlineOffset: '-4px' }}></div>
+                    <div style={{ position: 'absolute', top: 0, right: 0, width: '10px', height: '10px', background: 'black', outline: '2px solid var(--invoice-bg)', outlineOffset: '-4px' }}></div>
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '10px', height: '10px', background: 'black', outline: '2px solid var(--invoice-bg)', outlineOffset: '-4px' }}></div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
