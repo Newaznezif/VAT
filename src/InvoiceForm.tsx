@@ -1,11 +1,132 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { toWords } from 'number-to-words';
 import { saveAs } from 'file-saver';
 import { QRCodeCanvas } from 'qrcode.react';
 
+// --- Login Component ---
+const Login: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (username === 'mevat' && password === 'vatme') {
+      onLogin();
+    } else {
+      setError('Invalid username or password');
+    }
+  };
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%)',
+      fontFamily: 'sans-serif'
+    }}>
+      <div style={{
+        background: 'rgba(255, 255, 255, 0.05)',
+        backdropFilter: 'blur(16px)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        padding: '40px',
+        borderRadius: '24px',
+        width: '100%',
+        maxWidth: '400px',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+        textAlign: 'center'
+      }}>
+        <div style={{ marginBottom: '30px' }}>
+          <div style={{
+            width: '64px', height: '64px', background: '#3b82f6', borderRadius: '16px',
+            margin: '0 auto 15px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 0 20px rgba(59, 130, 246, 0.5)'
+          }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h2 style={{ color: 'white', fontSize: '24px', fontWeight: 'bold', margin: '0' }}>Secure Access</h2>
+          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px', marginTop: '8px' }}>VAT Invoice Management System</p>
+        </div>
+
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ textAlign: 'left' }}>
+            <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', display: 'block', marginBottom: '8px', marginLeft: '4px' }}>Username</label>
+            <input 
+              type="text" 
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              style={{
+                width: '100%', padding: '12px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.1)', color: 'white', fontSize: '16px', outline: 'none', transition: 'all 0.2s'
+              }}
+              placeholder="Enter username"
+              required
+            />
+          </div>
+          <div style={{ textAlign: 'left' }}>
+            <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', display: 'block', marginBottom: '8px', marginLeft: '4px' }}>Password</label>
+            <input 
+              type="password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                width: '100%', padding: '12px 16px', borderRadius: '12px', background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.1)', color: 'white', fontSize: '16px', outline: 'none', transition: 'all 0.2s'
+              }}
+              placeholder="••••••••"
+              required
+            />
+          </div>
+          
+          {error && <p style={{ color: '#ef4444', fontSize: '14px', margin: '0' }}>{error}</p>}
+          
+          <button type="submit" style={{
+            background: '#3b82f6', color: 'white', padding: '14px', borderRadius: '12px', border: 'none',
+            fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', marginTop: '10px',
+            transition: 'transform 0.1s, background 0.2s',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.background = '#2563eb'}
+          onMouseOut={(e) => e.currentTarget.style.background = '#3b82f6'}
+          >Login to System</button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+// --- Main Application Component (Guard) ---
 const InvoiceForm: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return localStorage.getItem('vat_auth') === 'true';
+  });
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+    localStorage.setItem('vat_auth', 'true');
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('vat_auth');
+  };
+
+  if (!isAuthenticated) {
+    return <Login onLogin={handleLogin} />;
+  }
+
+  return <InvoiceContent onLogout={handleLogout} />;
+};
+
+// --- Original Invoice Content Logic ---
+const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
   const invoiceRef = useRef<HTMLDivElement>(null);
   const [items, setItems] = useState(Array.from({ length: 8 }, (_, i) => ({
     id: i, description: '', unit: '', qty: '', unitPrice: ''
@@ -162,6 +283,7 @@ const InvoiceForm: React.FC = () => {
         <button className="btn" onClick={() => window.print()} style={{backgroundColor: '#fff', color: '#2563eb', border: '1px solid #2563eb'}}>Print</button>
         <button className="btn" onClick={() => setShowQrModal(true)} style={{backgroundColor: '#6366f1', color: '#fff'}}>Generate QR</button>
         <button className="btn" onClick={() => setShowQuickFill(true)} style={{backgroundColor: '#f59e0b', color: '#fff'}}>Quick Fill Form</button>
+        <button className="btn" onClick={onLogout} style={{backgroundColor: '#ef4444', color: '#fff', marginLeft: 'auto'}}>Logout</button>
       </div>
 
       {showQuickFill && (
