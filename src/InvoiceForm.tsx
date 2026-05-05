@@ -192,7 +192,7 @@ const InvoiceForm: React.FC = () => {
             </div>
             
             <div style={{ padding: '30px', overflowY: 'auto', flexGrow: 1 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
                 <section>
                   <h3 style={{ borderBottom: '2px solid #3b82f6', paddingBottom: '10px', color: '#1e3a8a', marginBottom: '20px', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <span style={{ background: '#3b82f6', color: 'white', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem' }}>1</span>
@@ -321,7 +321,8 @@ const InvoiceForm: React.FC = () => {
         </div>
       )}
 
-      <div className="invoice-wrapper" ref={invoiceRef}>
+      <div className="invoice-container">
+        <div className="invoice-wrapper" ref={invoiceRef}>
         {/* Vertical Left Sidebar */}
         <div className="vertical-sidebar">
           <span>በብርሃንና ሰላም ማተሚያ ድሪጅት የግብር ከፋይ መለያ ቁጥር 0000007140</span>
@@ -724,6 +725,7 @@ const InvoiceForm: React.FC = () => {
           </div>
         </div>
 
+        </div>
       </div>
     </div>
   );
