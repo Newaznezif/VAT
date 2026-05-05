@@ -428,7 +428,6 @@ const InvoiceForm: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
 
         {/* Footer */}
         <div className="footer-section">
