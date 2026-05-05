@@ -331,44 +331,48 @@ const InvoiceForm: React.FC = () => {
         {/* Header */}
         <div className="header-container">
           <div className="header-left">
-            <div className="invoice-no-row" style={{ alignItems: 'flex-start', gap: '15px' }}>
+            <div className="invoice-no-row" style={{ alignItems: 'center', gap: '20px' }}>
               <div className="text-group">
                 <span>የደረሰኝ ቁጥር</span>
                 <span>Invoice No.</span>
               </div>
-              <input 
-                type="text" 
-                className="field-input" 
-                style={{ 
-                  width: '120px', 
-                  fontSize: '18px', 
-                  fontWeight: 'bold', 
-                  color: '#dc2626', 
-                  border: '1px solid #dc2626',
-                  padding: '4px 8px',
-                  borderRadius: '4px',
-                  backgroundColor: 'rgba(220, 38, 38, 0.05)'
-                }} 
-                value={formData.invoiceNo} 
-                onChange={e => handleFormChange('invoiceNo', e.target.value)}
-                placeholder="No."
-              />
               
-              <div style={{ position: 'relative', width: '70px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ position: 'absolute', top: 0, left: '0px', width: '10px', height: '10px', borderTop: '2px solid black', borderLeft: '2px solid black' }}></div>
-                <div style={{ position: 'absolute', top: 0, left: '60px', width: '10px', height: '10px', borderTop: '2px solid black', borderRight: '2px solid black' }}></div>
-                <div style={{ position: 'absolute', top: '60px', left: '0px', width: '10px', height: '10px', borderBottom: '2px solid black', borderLeft: '2px solid black' }}></div>
-                <div style={{ position: 'absolute', top: '60px', left: '60px', width: '10px', height: '10px', borderBottom: '2px solid black', borderRight: '2px solid black' }}></div>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                <input 
+                  type="text" 
+                  className="field-input" 
+                  style={{ 
+                    width: '120px', 
+                    fontSize: '18px', 
+                    fontWeight: 'bold', 
+                    color: '#dc2626', 
+                    border: '1px solid #dc2626',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    backgroundColor: 'rgba(220, 38, 38, 0.05)',
+                    textAlign: 'center'
+                  }} 
+                  value={formData.invoiceNo} 
+                  onChange={e => handleFormChange('invoiceNo', e.target.value)}
+                  placeholder="No."
+                />
                 
-                {qrValue ? (
-                  <QRCodeCanvas value={qrValue} size={70} />
-                ) : (
-                  <div style={{ width: '60px', height: '60px', position: 'relative' }}>
-                    <div style={{ position: 'absolute', top: 0, left: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
-                    <div style={{ position: 'absolute', top: 0, right: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
-                  </div>
-                )}
+                <div style={{ position: 'relative', width: '70px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ position: 'absolute', top: 0, left: '0px', width: '10px', height: '10px', borderTop: '2px solid black', borderLeft: '2px solid black' }}></div>
+                  <div style={{ position: 'absolute', top: 0, left: '60px', width: '10px', height: '10px', borderTop: '2px solid black', borderRight: '2px solid black' }}></div>
+                  <div style={{ position: 'absolute', top: '60px', left: '0px', width: '10px', height: '10px', borderBottom: '2px solid black', borderLeft: '2px solid black' }}></div>
+                  <div style={{ position: 'absolute', top: '60px', left: '60px', width: '10px', height: '10px', borderBottom: '2px solid black', borderRight: '2px solid black' }}></div>
+                  
+                  {qrValue ? (
+                    <QRCodeCanvas value={qrValue} size={70} />
+                  ) : (
+                    <div style={{ width: '60px', height: '60px', position: 'relative' }}>
+                      <div style={{ position: 'absolute', top: 0, left: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
+                      <div style={{ position: 'absolute', top: 0, right: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
+                      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
