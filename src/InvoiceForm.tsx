@@ -864,11 +864,18 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
              </div>
           </div>
           
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px', paddingBottom: '10px' }}>
+          <div style={{ display: 'flex', marginTop: '15px', paddingBottom: '10px' }}>
+            <div style={{ visibility: 'hidden', marginRight: '20px' }}>
+              <div className="text-group" style={{ alignItems: 'flex-start' }}>
+                <span style={{fontWeight: 'bold'}}>ክፍፍል:-</span>
+                <span>Distribution:-</span>
+              </div>
+            </div>
+            
             <div style={{ 
               border: 'none', 
-              padding: '10px 40px', 
-              fontSize: '20px', 
+              padding: '0', 
+              fontSize: '18px', 
               fontWeight: 'bold', 
               letterSpacing: '8px',
               textTransform: 'none',
