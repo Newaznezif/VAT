@@ -483,8 +483,8 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           {/* Header */}
           <div className="header-container">
             <div className="header-left">
-              <div className="invoice-no-row" style={{ alignItems: 'center', gap: '20px' }}>
-                <div className="text-group">
+              <div className="invoice-no-row" style={{ alignItems: 'flex-start', gap: '20px' }}>
+                <div className="text-group" style={{ marginTop: '-5px' }}>
                   <span>የደረሰኝ ቁጥር</span>
                   <span>Invoice No.</span>
                 </div>
