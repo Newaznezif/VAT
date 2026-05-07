@@ -864,14 +864,14 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
              </div>
           </div>
           
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '25px', paddingBottom: '10px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '15px', paddingBottom: '10px' }}>
             <div style={{ 
-              border: '2px solid #000', 
+              border: 'none', 
               padding: '10px 40px', 
               fontSize: '20px', 
               fontWeight: 'bold', 
-              letterSpacing: '12px',
-              textTransform: 'uppercase',
+              letterSpacing: '8px',
+              textTransform: 'none',
               fontFamily: "'Times New Roman', serif"
             }}>
               Original
