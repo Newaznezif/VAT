@@ -863,6 +863,20 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                <span>2nd Copy Pad</span>
              </div>
           </div>
+          
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '25px', paddingBottom: '10px' }}>
+            <div style={{ 
+              border: '2px solid #000', 
+              padding: '10px 40px', 
+              fontSize: '20px', 
+              fontWeight: 'bold', 
+              letterSpacing: '12px',
+              textTransform: 'uppercase',
+              fontFamily: "'Times New Roman', serif"
+            }}>
+              Original
+            </div>
+          </div>
         </div>
 
         </div>
