@@ -231,6 +231,8 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         span.style.cssText = input.style.cssText;
         span.style.display = 'inline-block';
         span.style.minWidth = '50px';
+        span.style.color = invoiceColor; // Explicitly set color for Word
+        span.className = 'field-span';
         if (input.className.includes('field-input')) {
           span.style.borderBottom = '1px solid #000';
         }
@@ -266,7 +268,9 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             .calc-labels { display: table-cell; width: 60%; text-align: right; padding-right: 15px; }
             .calc-values { display: table-cell; width: 40%; border: 1px solid black; }
             .footer-section { margin-top: 30px; }
-            .vertical-sidebar { display: none; } /* Margin text is handled via Word Page Headers usually */
+            .vertical-sidebar { display: none; }
+            /* Apply theme color to user fields and totals in Word */
+            .theme-text, span.field-span { color: ${invoiceColor} !important; }
           </style>
         </head>
         <body>
@@ -486,7 +490,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                       width: '120px',
                       fontSize: '18px',
                       fontWeight: 'bold',
-                      color: 'inherit',
+                      color: invoiceColor,
                       border: 'none',
                       padding: '2px 0',
                       backgroundColor: 'transparent',
