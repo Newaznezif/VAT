@@ -463,7 +463,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       )}
 
       <div className="invoice-container">
-        <div className="invoice-wrapper" ref={invoiceRef} style={{ color: invoiceColor }}>
+        <div className="invoice-wrapper" ref={invoiceRef} style={{ '--field-color': invoiceColor } as any}>
           {/* Vertical Left Sidebar */}
           <div className="vertical-sidebar">
             <span>በብርሃንና ሰላም ማተሚያ ድሪጅት የግብር ከፋይ መለያ ቁጥር 0000007140</span>
@@ -737,7 +737,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                   <td>
                     <input type="number" value={item.unitPrice} onChange={e => updateItem(item.id, 'unitPrice', e.target.value)} />
                   </td>
-                  <td>{calculateTotal(item.qty, item.unitPrice) > 0 ? calculateTotal(item.qty, item.unitPrice).toLocaleString() : ''}</td>
+                  <td className="theme-text">{calculateTotal(item.qty, item.unitPrice) > 0 ? calculateTotal(item.qty, item.unitPrice).toLocaleString() : ''}</td>
                 </tr>
               ))}
             </tbody>
@@ -763,7 +763,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 <span style={{ fontWeight: 'bold' }}>ድምር</span>
                 <span>Total</span>
               </div>
-              <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div className="theme-text" style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {totalWithService > 0 && totalWithService.toLocaleString()}
               </div>
             </div>
@@ -774,7 +774,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ. /15%/</span>
                 <span>VAT</span>
               </div>
-              <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div className="theme-text" style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {vat > 0 && vat.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             </div>
@@ -786,7 +786,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 <span style={{ fontWeight: 'bold' }}>ተ.እ.ታ. ጨምሮ ጠቅላላ ዋጋ</span>
                 <span style={{ whiteSpace: 'nowrap' }}>Total Selling Price Including VAT</span>
               </div>
-              <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+              <div className="theme-text" style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
                 {grandTotal > 0 && grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             </div>
@@ -799,7 +799,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 <span style={{ fontWeight: 'bold' }}>በፊደል ብር/</span>
                 <span style={{ marginLeft: '4px' }}>In Word Birr</span>
               </div>
-              <div className="word-birr-box" style={{ display: 'flex', alignItems: 'center', paddingLeft: '10px', flexGrow: 1 }}>
+              <div className="word-birr-box theme-text" style={{ display: 'flex', alignItems: 'center', paddingLeft: '10px', flexGrow: 1 }}>
                 {getWordBirr()}
               </div>
             </div>

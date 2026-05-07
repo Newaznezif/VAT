@@ -143,7 +143,11 @@ input {
   background: transparent;
   border: none;
   outline: none;
-  color: inherit;
+  color: var(--field-color, #000);
+}
+
+.theme-text {
+  color: var(--field-color, #000);
 }
 
 .underlined-input {
