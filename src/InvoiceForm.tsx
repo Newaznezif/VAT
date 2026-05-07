@@ -287,6 +287,13 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
 
   return (
     <div>
+      <style>{`
+        .invoice-wrapper input,
+        .invoice-wrapper .field-input,
+        .invoice-wrapper .theme-text {
+          color: ${invoiceColor} !important;
+        }
+      `}</style>
       <div className="invoice-actions">
         <button className="btn" onClick={exportPDF}>Export to PDF</button>
         <button className="btn" onClick={exportWord} style={{ backgroundColor: '#10b981' }}>Export to Word</button>
