@@ -63,8 +63,8 @@ const Login: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div style={{ textAlign: 'left' }}>
             <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', display: 'block', marginBottom: '8px', marginLeft: '4px' }}>Username</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               style={{
@@ -77,8 +77,8 @@ const Login: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
           </div>
           <div style={{ textAlign: 'left' }}>
             <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', display: 'block', marginBottom: '8px', marginLeft: '4px' }}>Password</label>
-            <input 
-              type="password" 
+            <input
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={{
@@ -89,17 +89,17 @@ const Login: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
               required
             />
           </div>
-          
+
           {error && <p style={{ color: '#ef4444', fontSize: '14px', margin: '0' }}>{error}</p>}
-          
+
           <button type="submit" style={{
             background: '#3b82f6', color: 'white', padding: '14px', borderRadius: '12px', border: 'none',
             fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', marginTop: '10px',
             transition: 'transform 0.1s, background 0.2s',
             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
           }}
-          onMouseOver={(e) => e.currentTarget.style.background = '#2563eb'}
-          onMouseOut={(e) => e.currentTarget.style.background = '#3b82f6'}
+            onMouseOver={(e) => e.currentTarget.style.background = '#2563eb'}
+            onMouseOut={(e) => e.currentTarget.style.background = '#3b82f6'}
           >Login to System</button>
         </form>
       </div>
@@ -169,11 +169,12 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     voucherNo: '',
     receiverName: '',
   });
+  const [footerOffset, setFooterOffset] = useState(0);
 
   const handleFormChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
-  
+
   const calculateTotal = (qty: number | string, price: number | string) => {
     if (qty === '' || price === '') return 0;
     return Number(qty) * Number(price);
@@ -188,7 +189,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     if (grandTotal === 0) return '';
     const integerPart = Math.floor(grandTotal);
     const decimalPart = Math.round((grandTotal - integerPart) * 100);
-    
+
     let words = toWords(integerPart).replace(/-/g, ' ').toUpperCase() + ' BIRR';
     if (decimalPart > 0) {
       words += ` AND ${decimalPart}/100 CENTS`;
@@ -219,11 +220,11 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     if (!invoiceRef.current) return;
     try {
       const clone = invoiceRef.current.cloneNode(true) as HTMLElement;
-      
+
       // Replace all inputs with their current values
       const originalInputs = invoiceRef.current.querySelectorAll('input');
       const clonedInputs = clone.querySelectorAll('input');
-      
+
       originalInputs.forEach((input, index) => {
         const span = document.createElement('span');
         span.innerText = input.value || '\u00A0';
@@ -231,7 +232,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         span.style.display = 'inline-block';
         span.style.minWidth = '50px';
         if (input.className.includes('field-input')) {
-           span.style.borderBottom = '1px solid #000';
+          span.style.borderBottom = '1px solid #000';
         }
         clonedInputs[index].parentNode?.replaceChild(span, clonedInputs[index]);
       });
@@ -271,7 +272,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         <body>
       `;
       const footer = "</body></html>";
-      
+
       const sourceHTML = header + clone.outerHTML + footer;
       const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
       saveAs(blob, 'VAT_Invoice_Editable.doc');
@@ -284,11 +285,24 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     <div>
       <div className="invoice-actions">
         <button className="btn" onClick={exportPDF}>Export to PDF</button>
-        <button className="btn" onClick={exportWord} style={{backgroundColor: '#10b981'}}>Export to Word</button>
-        <button className="btn" onClick={() => window.print()} style={{backgroundColor: '#fff', color: '#2563eb', border: '1px solid #2563eb'}}>Print</button>
-        <button className="btn" onClick={() => setShowQrModal(true)} style={{backgroundColor: '#6366f1', color: '#fff'}}>Generate QR</button>
-        <button className="btn" onClick={() => setShowQuickFill(true)} style={{backgroundColor: '#f59e0b', color: '#fff'}}>Quick Fill Form</button>
-        <button className="btn" onClick={onLogout} style={{backgroundColor: '#ef4444', color: '#fff'}}>Logout</button>
+        <button className="btn" onClick={exportWord} style={{ backgroundColor: '#10b981' }}>Export to Word</button>
+        <button className="btn" onClick={() => window.print()} style={{ backgroundColor: '#fff', color: '#2563eb', border: '1px solid #2563eb' }}>Print</button>
+        <button className="btn" onClick={() => setShowQrModal(true)} style={{ backgroundColor: '#6366f1', color: '#fff' }}>Generate QR</button>
+        <button className="btn" onClick={() => setShowQuickFill(true)} style={{ backgroundColor: '#f59e0b', color: '#fff' }}>Quick Fill Form</button>
+        <button className="btn" onClick={onLogout} style={{ backgroundColor: '#ef4444', color: '#fff' }}>Logout</button>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '15px', padding: '0 10px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '8px' }}>
+          <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e3a8a' }}>Position:</span>
+          <input 
+            type="range" 
+            min="-200" 
+            max="400" 
+            value={footerOffset} 
+            onChange={(e) => setFooterOffset(parseInt(e.target.value))}
+            style={{ width: '120px', cursor: 'pointer' }}
+          />
+          <span style={{ fontSize: '11px', minWidth: '30px', color: '#1e3a8a' }}>{footerOffset}px</span>
+        </div>
       </div>
 
       {showQuickFill && (
@@ -303,13 +317,13 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             maxHeight: '90vh', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
             display: 'flex', flexDirection: 'column'
           }}>
-            <div style={{ 
-              padding: '20px 30px', 
-              background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)', 
+            <div style={{
+              padding: '20px 30px',
+              background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
               color: 'white',
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center' 
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
             }}>
               <div>
                 <h2 style={{ margin: 0, fontSize: '1.5rem' }}>Invoice Data Form</h2>
@@ -317,7 +331,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               </div>
               <button onClick={() => setShowQuickFill(false)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer', fontSize: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>&times;</button>
             </div>
-            
+
             <div style={{ padding: '30px', overflowY: 'auto', flexGrow: 1 }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
                 <section>
@@ -335,7 +349,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                       <input type="date" value={formData.invoiceDate} onChange={e => handleFormChange('invoiceDate', e.target.value)} />
                     </div>
                   </div>
-                  
+
                   <div style={{ marginTop: '20px' }}>
                     <h4 style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '15px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Supplier Details (From)</h4>
                     <div className="form-group"><label>Supplier Name</label><input type="text" value={formData.fromName} onChange={e => handleFormChange('fromName', e.target.value)} /></div>
@@ -365,7 +379,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                     <span style={{ background: '#3b82f6', color: 'white', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem' }}>2</span>
                     Customer & Payment
                   </h3>
-                  
+
                   <div className="form-group"><label>Customer Name</label><input type="text" value={formData.toName} onChange={e => handleFormChange('toName', e.target.value)} /></div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                     <div className="form-group"><label>City</label><input type="text" value={formData.toCity} onChange={e => handleFormChange('toCity', e.target.value)} /></div>
@@ -421,8 +435,8 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           }}>
             <h3 style={{ marginTop: 0, marginBottom: '15px' }}>Generate QR Code</h3>
             <p style={{ fontSize: '14px', color: '#666', marginBottom: '15px' }}>Enter text, a link, or a TIN number to generate the invoice QR code.</p>
-            <input 
-              type="text" 
+            <input
+              type="text"
               value={tempQrInput}
               onChange={(e) => setTempQrInput(e.target.value)}
               placeholder="Enter content..."
@@ -432,11 +446,11 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               }}
             />
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-              <button 
+              <button
                 onClick={() => setShowQrModal(false)}
                 style={{ padding: '8px 16px', border: 'none', background: '#eee', borderRadius: '6px', cursor: 'pointer' }}
               >Cancel</button>
-              <button 
+              <button
                 onClick={() => {
                   setQrValue(tempQrInput);
                   setShowQrModal(false);
@@ -450,287 +464,287 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
 
       <div className="invoice-container">
         <div className="invoice-wrapper" ref={invoiceRef}>
-        {/* Vertical Left Sidebar */}
-        <div className="vertical-sidebar">
-          <span>በብርሃንና ሰላም ማተሚያ ድሪጅት የግብር ከፋይ መለያ ቁጥር 0000007140</span>
-        </div>
+          {/* Vertical Left Sidebar */}
+          <div className="vertical-sidebar">
+            <span>በብርሃንና ሰላም ማተሚያ ድሪጅት የግብር ከፋይ መለያ ቁጥር 0000007140</span>
+          </div>
 
-        {/* Header */}
-        <div className="header-container">
-          <div className="header-left">
-            <div className="invoice-no-row" style={{ alignItems: 'center', gap: '20px' }}>
-              <div className="text-group">
-                <span>የደረሰኝ ቁጥር</span>
-                <span>Invoice No.</span>
-              </div>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                <input 
-                  type="text" 
-                  className="field-input" 
-                  style={{ 
-                    width: '120px', 
-                    fontSize: '18px', 
-                    fontWeight: 'bold', 
-                    color: '#000', 
-                    border: 'none',
-                    padding: '2px 0',
-                    backgroundColor: 'transparent',
-                    textAlign: 'center'
-                  }} 
-                  value={formData.invoiceNo} 
-                  onChange={e => handleFormChange('invoiceNo', e.target.value)}
-                  placeholder="No."
-                />
-                
-                <div style={{ position: 'relative', width: '70px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ position: 'absolute', top: 0, left: '0px', width: '10px', height: '10px', borderTop: '2px solid black', borderLeft: '2px solid black' }}></div>
-                  <div style={{ position: 'absolute', top: 0, left: '60px', width: '10px', height: '10px', borderTop: '2px solid black', borderRight: '2px solid black' }}></div>
-                  <div style={{ position: 'absolute', top: '60px', left: '0px', width: '10px', height: '10px', borderBottom: '2px solid black', borderLeft: '2px solid black' }}></div>
-                  <div style={{ position: 'absolute', top: '60px', left: '60px', width: '10px', height: '10px', borderBottom: '2px solid black', borderRight: '2px solid black' }}></div>
-                  
-                  {qrValue ? (
-                    <QRCodeCanvas value={qrValue} size={70} />
-                  ) : (
-                    <div style={{ width: '60px', height: '60px', position: 'relative' }}>
-                      <div style={{ position: 'absolute', top: 0, left: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
-                      <div style={{ position: 'absolute', top: 0, right: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
-                      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
-                    </div>
-                  )}
+          {/* Header */}
+          <div className="header-container">
+            <div className="header-left">
+              <div className="invoice-no-row" style={{ alignItems: 'center', gap: '20px' }}>
+                <div className="text-group">
+                  <span>የደረሰኝ ቁጥር</span>
+                  <span>Invoice No.</span>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                  <input
+                    type="text"
+                    className="field-input"
+                    style={{
+                      width: '120px',
+                      fontSize: '18px',
+                      fontWeight: 'bold',
+                      color: '#000',
+                      border: 'none',
+                      padding: '2px 0',
+                      backgroundColor: 'transparent',
+                      textAlign: 'center'
+                    }}
+                    value={formData.invoiceNo}
+                    onChange={e => handleFormChange('invoiceNo', e.target.value)}
+                    placeholder="No."
+                  />
+
+                  <div style={{ position: 'relative', width: '70px', height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ position: 'absolute', top: 0, left: '0px', width: '10px', height: '10px', borderTop: '2px solid black', borderLeft: '2px solid black' }}></div>
+                    <div style={{ position: 'absolute', top: 0, left: '60px', width: '10px', height: '10px', borderTop: '2px solid black', borderRight: '2px solid black' }}></div>
+                    <div style={{ position: 'absolute', top: '60px', left: '0px', width: '10px', height: '10px', borderBottom: '2px solid black', borderLeft: '2px solid black' }}></div>
+                    <div style={{ position: 'absolute', top: '60px', left: '60px', width: '10px', height: '10px', borderBottom: '2px solid black', borderRight: '2px solid black' }}></div>
+
+                    {qrValue ? (
+                      <QRCodeCanvas value={qrValue} size={70} />
+                    ) : (
+                      <div style={{ width: '60px', height: '60px', position: 'relative' }}>
+                        <div style={{ position: 'absolute', top: 0, left: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
+                        <div style={{ position: 'absolute', top: 0, right: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
+                        <div style={{ position: 'absolute', bottom: 0, left: 0, width: '15px', height: '15px', background: 'black', outline: '3px solid var(--invoice-bg)', outlineOffset: '-5px' }}></div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="header-center">
-            <h2>የተጨማሪ እሴት ታክስ ደረሰኝ</h2>
-            <h3>Value Added Tax Cash Sales Invoice</h3>
-            <div style={{ fontWeight: 'bold', borderBottom: '1px solid #000', display: 'inline-block' }}>የእጅ በእጅ ሽያጭ (Cash Sales)</div>
-          </div>
-
-          <div className="header-right">
-            <div className="text-group" style={{ alignItems: 'flex-start', display: 'inline-flex' }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                <span style={{ fontWeight: 'bold' }}>ቀን</span>
-                <input type="date" value={formData.invoiceDate} onChange={e => handleFormChange('invoiceDate', e.target.value)} style={{ borderBottom: '1px solid black', width: '120px' }} />
-              </div>
-              <span>Invoice Date</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Addresses */}
-        <div className="address-container" style={{ marginTop: '20px' }}>
-          {/* FROM */}
-          <div className="address-block">
-            <div className="field-row" style={{ marginBottom: '5px' }}>
-              <div className="text-group">
-                <span style={{ fontWeight: 'bold' }}>ከ</span>
-                <span>From:</span>
-              </div>
-              <input className="field-input" type="text" value={formData.fromName} onChange={e => handleFormChange('fromName', e.target.value)} />
-            </div>
-            
-            <div className="field-row">
-              <div className="text-group">
-                <span>የንግድ ስም ስያሜ</span>
-                <span>Trade Name</span>
-              </div>
-              <input className="field-input" type="text" value={formData.fromTradeName} onChange={e => handleFormChange('fromTradeName', e.target.value)} />
+            <div className="header-center">
+              <h2>የተጨማሪ እሴት ታክስ ደረሰኝ</h2>
+              <h3>Value Added Tax Cash Sales Invoice</h3>
+              <div style={{ fontWeight: 'bold', borderBottom: '1px solid #000', display: 'inline-block' }}>የእጅ በእጅ ሽያጭ (Cash Sales)</div>
             </div>
 
-            <div className="field-row" style={{ marginBottom: '18px' }}>
-              <div style={{ position: 'relative' }}>
-                <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>አድራሻ፡ ከተማ</span>
-                <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Address City/Town</span>
+            <div className="header-right">
+              <div className="text-group" style={{ alignItems: 'flex-start', display: 'inline-flex' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                  <span style={{ fontWeight: 'bold' }}>ቀን</span>
+                  <input type="date" value={formData.invoiceDate} onChange={e => handleFormChange('invoiceDate', e.target.value)} style={{ borderBottom: '1px solid black', width: '120px' }} />
+                </div>
+                <span>Invoice Date</span>
               </div>
-              <input type="text" className="field-input" style={{ margin: '0 5px', textAlign: 'center' }} value={formData.fromCity} onChange={e => handleFormChange('fromCity', e.target.value)} />
-              
-              <div style={{ position: 'relative' }}>
-                <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ዞን/ክ/ከተማ</span>
-                <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Zone/ Sub-City</span>
-              </div>
-              <input type="text" className="field-input" style={{ margin: '0 0 0 5px', textAlign: 'center' }} value={formData.fromZone} onChange={e => handleFormChange('fromZone', e.target.value)} />
-            </div>
-
-            <div className="field-row" style={{ marginBottom: '18px' }}>
-              <div style={{ position: 'relative' }}>
-                <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ወረዳ</span>
-                <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Woreda</span>
-              </div>
-              <input type="text" className="field-input" style={{ margin: '0 5px', textAlign: 'center' }} value={formData.fromWoreda} onChange={e => handleFormChange('fromWoreda', e.target.value)} />
-              
-              <div style={{ position: 'relative' }}>
-                <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ቀበሌ</span>
-                <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Kebele</span>
-              </div>
-              <input type="text" className="field-input" style={{ margin: '0 0 0 5px', textAlign: 'center' }} value={formData.fromKebele} onChange={e => handleFormChange('fromKebele', e.target.value)} />
-            </div>
-
-            <div className="field-row" style={{ marginBottom: '18px' }}>
-              <div style={{ position: 'relative' }}>
-                <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>የቤት.ቁ</span>
-                <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>H.No.</span>
-              </div>
-              <input type="text" className="field-input" style={{ width: '50px', flexGrow: 0, margin: '0 5px', textAlign: 'center' }} value={formData.fromHNo} onChange={e => handleFormChange('fromHNo', e.target.value)} />
-              
-              <div style={{ position: 'relative' }}>
-                <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ስልክ</span>
-                <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Tele</span>
-              </div>
-              <input type="text" className="field-input" style={{ marginLeft: '5px' }} value={formData.fromTele} onChange={e => handleFormChange('fromTele', e.target.value)} />
-            </div>
-
-            <div className="field-row">
-              <div className="text-group">
-                <span>የሻጭ የግብር ከፋይ መለያ ቁጥር</span>
-                <span>Supplier's TIN</span>
-              </div>
-              <input type="text" className="field-input" value={formData.fromTIN} onChange={e => handleFormChange('fromTIN', e.target.value)} />
-            </div>
-
-            <div className="field-row">
-              <div className="text-group">
-                <span>የሻጭ የተ.እ.ታ. ቁጥር</span>
-                <span>Supplier's VAT Reg. No.</span>
-              </div>
-              <input type="text" className="field-input" value={formData.fromVATNo} onChange={e => handleFormChange('fromVATNo', e.target.value)} />
-            </div>
-
-            <div className="field-row">
-              <div className="text-group">
-                <span>ለተ.እ.ታ. የተመዘገበበት ቀን</span>
-                <span>Date of VAT Registration</span>
-              </div>
-              <input type="text" className="field-input" value={formData.fromVATDate} onChange={e => handleFormChange('fromVATDate', e.target.value)} />
             </div>
           </div>
 
-          {/* TO */}
-          <div className="address-block">
-            <div className="field-row" style={{ marginBottom: '5px' }}>
-              <div className="text-group">
-                <span style={{ fontWeight: 'bold' }}>ለ</span>
-                <span>To</span>
+          {/* Addresses */}
+          <div className="address-container" style={{ marginTop: '20px' }}>
+            {/* FROM */}
+            <div className="address-block">
+              <div className="field-row" style={{ marginBottom: '5px' }}>
+                <div className="text-group">
+                  <span style={{ fontWeight: 'bold' }}>ከ</span>
+                  <span>From:</span>
+                </div>
+                <input className="field-input" type="text" value={formData.fromName} onChange={e => handleFormChange('fromName', e.target.value)} />
               </div>
-              <input className="field-input" type="text" value={formData.toName} onChange={e => handleFormChange('toName', e.target.value)} />
+
+              <div className="field-row">
+                <div className="text-group">
+                  <span>የንግድ ስም ስያሜ</span>
+                  <span>Trade Name</span>
+                </div>
+                <input className="field-input" type="text" value={formData.fromTradeName} onChange={e => handleFormChange('fromTradeName', e.target.value)} />
+              </div>
+
+              <div className="field-row" style={{ marginBottom: '18px' }}>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>አድራሻ፡ ከተማ</span>
+                  <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Address City/Town</span>
+                </div>
+                <input type="text" className="field-input" style={{ margin: '0 5px', textAlign: 'center' }} value={formData.fromCity} onChange={e => handleFormChange('fromCity', e.target.value)} />
+
+                <div style={{ position: 'relative' }}>
+                  <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ዞን/ክ/ከተማ</span>
+                  <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Zone/ Sub-City</span>
+                </div>
+                <input type="text" className="field-input" style={{ margin: '0 0 0 5px', textAlign: 'center' }} value={formData.fromZone} onChange={e => handleFormChange('fromZone', e.target.value)} />
+              </div>
+
+              <div className="field-row" style={{ marginBottom: '18px' }}>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ወረዳ</span>
+                  <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Woreda</span>
+                </div>
+                <input type="text" className="field-input" style={{ margin: '0 5px', textAlign: 'center' }} value={formData.fromWoreda} onChange={e => handleFormChange('fromWoreda', e.target.value)} />
+
+                <div style={{ position: 'relative' }}>
+                  <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ቀበሌ</span>
+                  <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Kebele</span>
+                </div>
+                <input type="text" className="field-input" style={{ margin: '0 0 0 5px', textAlign: 'center' }} value={formData.fromKebele} onChange={e => handleFormChange('fromKebele', e.target.value)} />
+              </div>
+
+              <div className="field-row" style={{ marginBottom: '18px' }}>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>የቤት.ቁ</span>
+                  <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>H.No.</span>
+                </div>
+                <input type="text" className="field-input" style={{ width: '50px', flexGrow: 0, margin: '0 5px', textAlign: 'center' }} value={formData.fromHNo} onChange={e => handleFormChange('fromHNo', e.target.value)} />
+
+                <div style={{ position: 'relative' }}>
+                  <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>ስልክ</span>
+                  <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Tele</span>
+                </div>
+                <input type="text" className="field-input" style={{ marginLeft: '5px' }} value={formData.fromTele} onChange={e => handleFormChange('fromTele', e.target.value)} />
+              </div>
+
+              <div className="field-row">
+                <div className="text-group">
+                  <span>የሻጭ የግብር ከፋይ መለያ ቁጥር</span>
+                  <span>Supplier's TIN</span>
+                </div>
+                <input type="text" className="field-input" value={formData.fromTIN} onChange={e => handleFormChange('fromTIN', e.target.value)} />
+              </div>
+
+              <div className="field-row">
+                <div className="text-group">
+                  <span>የሻጭ የተ.እ.ታ. ቁጥር</span>
+                  <span>Supplier's VAT Reg. No.</span>
+                </div>
+                <input type="text" className="field-input" value={formData.fromVATNo} onChange={e => handleFormChange('fromVATNo', e.target.value)} />
+              </div>
+
+              <div className="field-row">
+                <div className="text-group">
+                  <span>ለተ.እ.ታ. የተመዘገበበት ቀን</span>
+                  <span>Date of VAT Registration</span>
+                </div>
+                <input type="text" className="field-input" value={formData.fromVATDate} onChange={e => handleFormChange('fromVATDate', e.target.value)} />
+              </div>
             </div>
 
-            <div className="field-row" style={{ marginBottom: '18px' }}>
-              <div style={{ position: 'relative' }}>
-                <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>አድራሻ፡ ከተማ</span>
-                <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Address City/Town</span>
+            {/* TO */}
+            <div className="address-block">
+              <div className="field-row" style={{ marginBottom: '5px' }}>
+                <div className="text-group">
+                  <span style={{ fontWeight: 'bold' }}>ለ</span>
+                  <span>To</span>
+                </div>
+                <input className="field-input" type="text" value={formData.toName} onChange={e => handleFormChange('toName', e.target.value)} />
               </div>
-              <input className="field-input" type="text" style={{width: '100px', flexGrow: 0, margin: '0 5px'}} value={formData.toCity} onChange={e => handleFormChange('toCity', e.target.value)} />
-              
-              <div style={{ position: 'relative', marginLeft: '10px' }}>
-                <span style={{ whiteSpace: 'nowrap' }}>ዞን/ክ/ከተማ</span>
-                <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Zone/ Sub-City</span>
-              </div>
-              <input className="field-input" type="text" value={formData.toZone} onChange={e => handleFormChange('toZone', e.target.value)} />
-            </div>
 
-            <div className="field-row" style={{ marginBottom: '18px' }}>
-              <div style={{ position: 'relative' }}>
-                <span style={{ whiteSpace: 'nowrap' }}>ወረዳ</span>
-                <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Woreda</span>
-              </div>
-              <input className="field-input" type="text" style={{width: '60px', flexGrow: 0, margin: '0 5px'}} value={formData.toWoreda} onChange={e => handleFormChange('toWoreda', e.target.value)} />
-              
-              <div style={{ position: 'relative', marginLeft: '10px' }}>
-                <span style={{ whiteSpace: 'nowrap' }}>ቀበሌ</span>
-                <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Kebele</span>
-              </div>
-              <input className="field-input" type="text" style={{width: '60px', flexGrow: 0, margin: '0 5px'}} value={formData.toKebele} onChange={e => handleFormChange('toKebele', e.target.value)} />
+              <div className="field-row" style={{ marginBottom: '18px' }}>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ whiteSpace: 'nowrap', fontWeight: 'bold' }}>አድራሻ፡ ከተማ</span>
+                  <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Address City/Town</span>
+                </div>
+                <input className="field-input" type="text" style={{ width: '100px', flexGrow: 0, margin: '0 5px' }} value={formData.toCity} onChange={e => handleFormChange('toCity', e.target.value)} />
 
-              <div style={{ position: 'relative', marginLeft: '10px' }}>
-                <span style={{ whiteSpace: 'nowrap' }}>የቤት.ቁ</span>
-                <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>H.No.</span>
+                <div style={{ position: 'relative', marginLeft: '10px' }}>
+                  <span style={{ whiteSpace: 'nowrap' }}>ዞን/ክ/ከተማ</span>
+                  <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Zone/ Sub-City</span>
+                </div>
+                <input className="field-input" type="text" value={formData.toZone} onChange={e => handleFormChange('toZone', e.target.value)} />
               </div>
-              <input className="field-input" type="text" value={formData.toHNo} onChange={e => handleFormChange('toHNo', e.target.value)} />
-            </div>
 
-            <div className="field-row" style={{marginTop: '22px'}}>
-              <div className="text-group">
-                <span>የገዢ የግብር ከፋይ መለያ ቁጥር</span>
-                <span>Customer's TIN</span>
-              </div>
-              <input className="field-input" type="text" value={formData.toTIN} onChange={e => handleFormChange('toTIN', e.target.value)} />
-            </div>
+              <div className="field-row" style={{ marginBottom: '18px' }}>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ whiteSpace: 'nowrap' }}>ወረዳ</span>
+                  <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Woreda</span>
+                </div>
+                <input className="field-input" type="text" style={{ width: '60px', flexGrow: 0, margin: '0 5px' }} value={formData.toWoreda} onChange={e => handleFormChange('toWoreda', e.target.value)} />
 
-            <div className="field-row">
-              <div className="text-group">
-                <span>የገዢ የተ.እ.ታ. ቁጥር /ካለው/</span>
-                <span>Customer's VAT Reg. No.</span>
-              </div>
-              <input className="field-input" type="text" value={formData.toVATNo} onChange={e => handleFormChange('toVATNo', e.target.value)} />
-            </div>
+                <div style={{ position: 'relative', marginLeft: '10px' }}>
+                  <span style={{ whiteSpace: 'nowrap' }}>ቀበሌ</span>
+                  <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>Kebele</span>
+                </div>
+                <input className="field-input" type="text" style={{ width: '60px', flexGrow: 0, margin: '0 5px' }} value={formData.toKebele} onChange={e => handleFormChange('toKebele', e.target.value)} />
 
-            <div className="field-row">
-              <div className="text-group">
-                <span>ለተ.እ.ታ. የተመዘገበበት ቀን</span>
-                <span>Date of VAT Registration</span>
+                <div style={{ position: 'relative', marginLeft: '10px' }}>
+                  <span style={{ whiteSpace: 'nowrap' }}>የቤት.ቁ</span>
+                  <span style={{ position: 'absolute', top: '100%', left: 0, whiteSpace: 'nowrap' }}>H.No.</span>
+                </div>
+                <input className="field-input" type="text" value={formData.toHNo} onChange={e => handleFormChange('toHNo', e.target.value)} />
               </div>
-              <input className="field-input" type="text" value={formData.toVATDate} onChange={e => handleFormChange('toVATDate', e.target.value)} />
+
+              <div className="field-row" style={{ marginTop: '22px' }}>
+                <div className="text-group">
+                  <span>የገዢ የግብር ከፋይ መለያ ቁጥር</span>
+                  <span>Customer's TIN</span>
+                </div>
+                <input className="field-input" type="text" value={formData.toTIN} onChange={e => handleFormChange('toTIN', e.target.value)} />
+              </div>
+
+              <div className="field-row">
+                <div className="text-group">
+                  <span>የገዢ የተ.እ.ታ. ቁጥር /ካለው/</span>
+                  <span>Customer's VAT Reg. No.</span>
+                </div>
+                <input className="field-input" type="text" value={formData.toVATNo} onChange={e => handleFormChange('toVATNo', e.target.value)} />
+              </div>
+
+              <div className="field-row">
+                <div className="text-group">
+                  <span>ለተ.እ.ታ. የተመዘገበበት ቀን</span>
+                  <span>Date of VAT Registration</span>
+                </div>
+                <input className="field-input" type="text" value={formData.toVATDate} onChange={e => handleFormChange('toVATDate', e.target.value)} />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Table */}
-        <table className="invoice-table">
-          <thead>
-            <tr>
-              <th style={{ width: '5%' }}>
-                <div>ተ.ቁ</div>
-                <div>No.</div>
-              </th>
-              <th className="desc-col">
-                <div>የዕቃው ዓይነት</div>
-                <div>Descreption</div>
-              </th>
-              <th style={{ width: '15%' }}>
-                <div>መለኪያ</div>
-                <div>Unit</div>
-              </th>
-              <th style={{ width: '10%' }}>
-                <div>ብዛት</div>
-                <div>Qty</div>
-              </th>
-              <th style={{ width: '15%' }}>
-                <div>የአንዱ ዋጋ</div>
-                <div>Unit Price</div>
-              </th>
-              <th style={{ width: '20%' }}>
-                <div>ጠቅላላ ዋጋ</div>
-                <div>Total Amount</div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td></td>
-                <td className="desc-col">
-                  <input type="text" value={item.description} onChange={e => updateItem(item.id, 'description', e.target.value)} />
-                </td>
-                <td>
-                  <input type="text" value={item.unit} onChange={e => updateItem(item.id, 'unit', e.target.value)} />
-                </td>
-                <td>
-                  <input type="number" value={item.qty} onChange={e => updateItem(item.id, 'qty', e.target.value)} />
-                </td>
-                <td>
-                  <input type="number" value={item.unitPrice} onChange={e => updateItem(item.id, 'unitPrice', e.target.value)} />
-                </td>
-                <td>{calculateTotal(item.qty, item.unitPrice) > 0 ? calculateTotal(item.qty, item.unitPrice).toLocaleString() : ''}</td>
+          {/* Table */}
+          <table className="invoice-table">
+            <thead>
+              <tr>
+                <th style={{ width: '5%' }}>
+                  <div>ተ.ቁ</div>
+                  <div>No.</div>
+                </th>
+                <th className="desc-col">
+                  <div>የዕቃው ዓይነት</div>
+                  <div>Descreption</div>
+                </th>
+                <th style={{ width: '15%' }}>
+                  <div>መለኪያ</div>
+                  <div>Unit</div>
+                </th>
+                <th style={{ width: '10%' }}>
+                  <div>ብዛት</div>
+                  <div>Qty</div>
+                </th>
+                <th style={{ width: '15%' }}>
+                  <div>የአንዱ ዋጋ</div>
+                  <div>Unit Price</div>
+                </th>
+                <th style={{ width: '20%' }}>
+                  <div>ጠቅላላ ዋጋ</div>
+                  <div>Total Amount</div>
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr key={item.id}>
+                  <td></td>
+                  <td className="desc-col">
+                    <input type="text" value={item.description} onChange={e => updateItem(item.id, 'description', e.target.value)} />
+                  </td>
+                  <td>
+                    <input type="text" value={item.unit} onChange={e => updateItem(item.id, 'unit', e.target.value)} />
+                  </td>
+                  <td>
+                    <input type="number" value={item.qty} onChange={e => updateItem(item.id, 'qty', e.target.value)} />
+                  </td>
+                  <td>
+                    <input type="number" value={item.unitPrice} onChange={e => updateItem(item.id, 'unitPrice', e.target.value)} />
+                  </td>
+                  <td>{calculateTotal(item.qty, item.unitPrice) > 0 ? calculateTotal(item.qty, item.unitPrice).toLocaleString() : ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-        {/* Calculations */}
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          {/* Calculations */}
+          <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {/* Top 3 rows align with Unit Price column (65% spacer, 15% label area) */}
             <div style={{ display: 'flex', minHeight: '25px' }}>
               <div style={{ width: '62%' }}></div>
@@ -739,7 +753,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 <span>Service Charge</span>
               </div>
               <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000' }}>
-                 <input type="number" style={{ width: '100%', height: '100%', textAlign: 'center' }} value={serviceCharge} onChange={e => setServiceCharge(e.target.value === "" ? "" : Number(e.target.value))} />
+                <input type="number" style={{ width: '100%', height: '100%', textAlign: 'center' }} value={serviceCharge} onChange={e => setServiceCharge(e.target.value === "" ? "" : Number(e.target.value))} />
               </div>
             </div>
 
@@ -761,7 +775,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 <span>VAT</span>
               </div>
               <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {vat > 0 && vat.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                {vat > 0 && vat.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             </div>
 
@@ -773,118 +787,119 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 <span style={{ whiteSpace: 'nowrap' }}>Total Selling Price Including VAT</span>
               </div>
               <div style={{ width: '20%', borderLeft: '1px solid #000', borderRight: '1px solid #000', borderBottom: '1px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-                {grandTotal > 0 && grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                {grandTotal > 0 && grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             </div>
           </div>
 
-        {/* Footer */}
-        <div className="footer-section">
-          <div className="word-birr-container" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px', whiteSpace: 'nowrap' }}>
-              <span style={{fontWeight: 'bold'}}>በፊደል ብር/</span>
-              <span style={{marginLeft: '4px'}}>In Word Birr</span>
+          {/* Footer */}
+          <div className="footer-section">
+            <div className="word-birr-container" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', marginRight: '10px', whiteSpace: 'nowrap' }}>
+                <span style={{ fontWeight: 'bold' }}>በፊደል ብር/</span>
+                <span style={{ marginLeft: '4px' }}>In Word Birr</span>
+              </div>
+              <div className="word-birr-box" style={{ display: 'flex', alignItems: 'center', paddingLeft: '10px', flexGrow: 1 }}>
+                {getWordBirr()}
+              </div>
             </div>
-            <div className="word-birr-box" style={{ display: 'flex', alignItems: 'center', paddingLeft: '10px', flexGrow: 1 }}>
-              {getWordBirr()}
-            </div>
-          </div>
 
-          <div className="payment-row" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0 }}>
-            <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center', whiteSpace: 'nowrap' }}>
-              <span style={{fontWeight: 'bold'}}>የክፍያ ሁኔታ/</span>
-              <span style={{marginLeft: '4px'}}>Mode of Payment</span>
-            </div>
-            
-            <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-              <div className="checkbox-group">
-                <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <span style={{fontWeight: 'bold'}}>በጥሬ ገንዘብ/</span>
-                  <span style={{marginLeft: '4px'}}>Cash</span>
+            <div className="payment-row" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0 }}>
+              <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center', whiteSpace: 'nowrap' }}>
+                <span style={{ fontWeight: 'bold' }}>የክፍያ ሁኔታ/</span>
+                <span style={{ marginLeft: '4px' }}>Mode of Payment</span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                <div className="checkbox-group">
+                  <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <span style={{ fontWeight: 'bold' }}>በጥሬ ገንዘብ/</span>
+                    <span style={{ marginLeft: '4px' }}>Cash</span>
+                  </div>
+                  <div className="check-box"></div>
                 </div>
-                <div className="check-box"></div>
-              </div>
 
-              <div className="checkbox-group" style={{ marginLeft: '30px' }}>
-                <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <span style={{fontWeight: 'bold'}}>በቼክ/</span>
-                  <span style={{marginLeft: '4px'}}>Check</span>
+                <div className="checkbox-group" style={{ marginLeft: '30px' }}>
+                  <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <span style={{ fontWeight: 'bold' }}>በቼክ/</span>
+                    <span style={{ marginLeft: '4px' }}>Check</span>
+                  </div>
+                  <div className="check-box"></div>
                 </div>
-                <div className="check-box"></div>
-              </div>
 
-              <div className="field-row" style={{ flexGrow: 1, marginLeft: '30px', maxWidth: '75%' }}>
-                <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <span style={{fontWeight: 'bold'}}>የቼክ ቁጥር/</span>
-                  <span style={{marginLeft: '4px'}}>Check No.</span>
+                <div className="field-row" style={{ flexGrow: 1, marginLeft: '30px', maxWidth: '75%' }}>
+                  <div className="text-group" style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <span style={{ fontWeight: 'bold' }}>የቼክ ቁጥር/</span>
+                    <span style={{ marginLeft: '4px' }}>Check No.</span>
+                  </div>
+                  <input className="field-input" type="text" value={formData.checkNo} onChange={e => handleFormChange('checkNo', e.target.value)} />
                 </div>
-                <input className="field-input" type="text" value={formData.checkNo} onChange={e => handleFormChange('checkNo', e.target.value)} />
               </div>
             </div>
-          </div>
 
-          <div className="signature-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', marginTop: '5px' }}>
-            <div className="field-row" style={{ width: '55%' }}>
-              <div className="text-group">
-                <span style={{fontWeight: 'bold'}}>ቫውቸር ቁጥር/</span>
-                <span>Voucher No.</span>
+            <div className="signature-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', marginTop: '5px' }}>
+              <div className="field-row" style={{ width: '55%' }}>
+                <div className="text-group">
+                  <span style={{ fontWeight: 'bold' }}>ቫውቸር ቁጥር/</span>
+                  <span>Voucher No.</span>
+                </div>
+                <input className="field-input" type="text" value={formData.voucherNo} onChange={e => handleFormChange('voucherNo', e.target.value)} />
               </div>
-              <input className="field-input" type="text" value={formData.voucherNo} onChange={e => handleFormChange('voucherNo', e.target.value)} />
+
+              <div className="field-row" style={{ width: '40%' }}>
+                <div className="text-group">
+                  <span style={{ fontWeight: 'bold' }}>የተቀባይ ስምና ፊርማ/</span>
+                  <span>Receiver Name & Signature</span>
+                </div>
+                <input className="field-input" type="text" value={formData.receiverName} onChange={e => handleFormChange('receiverName', e.target.value)} />
+              </div>
             </div>
 
-            <div className="field-row" style={{ width: '40%' }}>
-              <div className="text-group">
-                <span style={{fontWeight: 'bold'}}>የተቀባይ ስምና ፊርማ/</span>
-                <span>Receiver Name & Signature</span>
-              </div>
-              <input className="field-input" type="text" value={formData.receiverName} onChange={e => handleFormChange('receiverName', e.target.value)} />
-            </div>
-          </div>
-
-          <div className="distribution-row" style={{ display: 'flex', gap: '20px', marginTop: '5px' }}>
-             <div className="text-group" style={{ alignItems: 'flex-start' }}>
-               <span style={{fontWeight: 'bold'}}>ክፍፍል:-</span>
-               <span>Distribution:-</span>
-             </div>
-             <div className="text-group" style={{ alignItems: 'flex-start' }}>
-               <span style={{fontWeight: 'bold'}}>ዋናው</span>
-               <span>Original</span>
-             </div>
-             <div className="text-group" style={{ alignItems: 'flex-start' }}>
-               <span style={{fontWeight: 'bold'}}>ለከፋይ</span>
-               <span>Customer</span>
-             </div>
-             <div className="text-group" style={{ alignItems: 'flex-start' }}>
-               <span style={{fontWeight: 'bold'}}>1ኛ ኮፒ ለሂሳብ ክፍል</span>
-               <span>1st Copy Account</span>
-             </div>
-             <div className="text-group" style={{ alignItems: 'flex-start' }}>
-               <span style={{fontWeight: 'bold'}}>2ኛ ኮፒ ለፓድ</span>
-               <span>2nd Copy Pad</span>
-             </div>
-          </div>
-          
-          <div style={{ display: 'flex', marginTop: '15px', paddingBottom: '10px' }}>
-            <div style={{ visibility: 'hidden', marginRight: '20px' }}>
+            <div className="distribution-row" style={{ display: 'flex', gap: '20px', marginTop: '5px' }}>
               <div className="text-group" style={{ alignItems: 'flex-start' }}>
-                <span style={{fontWeight: 'bold'}}>ክፍፍል:-</span>
+                <span style={{ fontWeight: 'bold' }}>ክፍፍል:-</span>
                 <span>Distribution:-</span>
               </div>
+              <div className="text-group" style={{ alignItems: 'flex-start' }}>
+                <span style={{ fontWeight: 'bold' }}>ዋናው</span>
+                <span>Original</span>
+              </div>
+              <div className="text-group" style={{ alignItems: 'flex-start' }}>
+                <span style={{ fontWeight: 'bold' }}>ለከፋይ</span>
+                <span>Customer</span>
+              </div>
+              <div className="text-group" style={{ alignItems: 'flex-start' }}>
+                <span style={{ fontWeight: 'bold' }}>1ኛ ኮፒ ለሂሳብ ክፍል</span>
+                <span>1st Copy Account</span>
+              </div>
+              <div className="text-group" style={{ alignItems: 'flex-start' }}>
+                <span style={{ fontWeight: 'bold' }}>2ኛ ኮፒ ለፓድ</span>
+                <span>2nd Copy Pad</span>
+              </div>
             </div>
-            
-            <div style={{ 
-              border: 'none', 
-              padding: '0', 
-              fontSize: '18px', 
-              fontWeight: 'bold', 
-              letterSpacing: '8px',
-              textTransform: 'none',
-              fontFamily: "'Times New Roman', serif"
-            }}>
-              Original
+
+            <div style={{ display: 'flex', marginTop: '15px', paddingBottom: '10px' }}>
+              <div style={{ visibility: 'hidden', marginRight: '20px' }}>
+                <div className="text-group" style={{ alignItems: 'flex-start' }}>
+                  <span style={{ fontWeight: 'bold' }}>ክፍፍል:-</span>
+                  <span>Distribution:-</span>
+                </div>
+              </div>
+
+              <div style={{
+                border: 'none',
+                padding: '10px',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                letterSpacing: '8px',
+                textTransform: 'none',
+                fontFamily: "'Times New Roman', serif",
+                transform: `translateX(${footerOffset}px)`
+              }}>
+                Original
+              </div>
             </div>
           </div>
-        </div>
 
         </div>
       </div>
