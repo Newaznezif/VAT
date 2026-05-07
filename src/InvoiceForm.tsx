@@ -169,6 +169,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     voucherNo: '',
     receiverName: '',
   });
+  const [invoiceColor, setInvoiceColor] = useState('#343444');
 
   const handleFormChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -289,6 +290,19 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         <button className="btn" onClick={() => setShowQrModal(true)} style={{ backgroundColor: '#6366f1', color: '#fff' }}>Generate QR</button>
         <button className="btn" onClick={() => setShowQuickFill(true)} style={{ backgroundColor: '#f59e0b', color: '#fff' }}>Quick Fill Form</button>
         <button className="btn" onClick={onLogout} style={{ backgroundColor: '#ef4444', color: '#fff' }}>Logout</button>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '15px', padding: '5px 12px', background: 'white', borderRadius: '8px', border: '1px solid #ddd', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+          <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Theme Color
+          </label>
+          <input 
+            type="color" 
+            value={invoiceColor} 
+            onChange={(e) => setInvoiceColor(e.target.value)}
+            style={{ width: '30px', height: '24px', padding: '0', border: 'none', cursor: 'pointer', background: 'none' }}
+          />
+        </div>
       </div>
 
       {showQuickFill && (
@@ -449,7 +463,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       )}
 
       <div className="invoice-container">
-        <div className="invoice-wrapper" ref={invoiceRef}>
+        <div className="invoice-wrapper" ref={invoiceRef} style={{ color: invoiceColor }}>
           {/* Vertical Left Sidebar */}
           <div className="vertical-sidebar">
             <span>በብርሃንና ሰላም ማተሚያ ድሪጅት የግብር ከፋይ መለያ ቁጥር 0000007140</span>
@@ -472,7 +486,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                       width: '120px',
                       fontSize: '18px',
                       fontWeight: 'bold',
-                      color: '#000',
+                      color: 'inherit',
                       border: 'none',
                       padding: '2px 0',
                       backgroundColor: 'transparent',
@@ -880,7 +894,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 letterSpacing: '8px',
                 textTransform: 'none',
                 fontFamily: "'Times New Roman', serif",
-                transform: 'translateX(0px)' // Manually edit this value (e.g., 50px) to move text left/right
+                transform: 'translateX(100px)',//y edit this value (e.g., 50px) to move text left/right
               }}>
                 Original
               </div>
