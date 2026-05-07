@@ -848,7 +848,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
              </div>
              <div className="text-group" style={{ alignItems: 'flex-start' }}>
                <span style={{fontWeight: 'bold'}}>ዋናው</span>
-               <span>Original Customer</span>
+               <span>Original</span>
              </div>
              <div className="text-group" style={{ alignItems: 'flex-start' }}>
                <span style={{fontWeight: 'bold'}}>ለከፋይ</span>
