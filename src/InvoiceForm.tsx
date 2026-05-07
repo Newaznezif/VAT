@@ -169,7 +169,6 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     voucherNo: '',
     receiverName: '',
   });
-  const [footerOffset, setFooterOffset] = useState(0);
 
   const handleFormChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -290,19 +289,6 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         <button className="btn" onClick={() => setShowQrModal(true)} style={{ backgroundColor: '#6366f1', color: '#fff' }}>Generate QR</button>
         <button className="btn" onClick={() => setShowQuickFill(true)} style={{ backgroundColor: '#f59e0b', color: '#fff' }}>Quick Fill Form</button>
         <button className="btn" onClick={onLogout} style={{ backgroundColor: '#ef4444', color: '#fff' }}>Logout</button>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '15px', padding: '0 10px', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '8px' }}>
-          <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#1e3a8a' }}>Position:</span>
-          <input 
-            type="range" 
-            min="-200" 
-            max="400" 
-            value={footerOffset} 
-            onChange={(e) => setFooterOffset(parseInt(e.target.value))}
-            style={{ width: '120px', cursor: 'pointer' }}
-          />
-          <span style={{ fontSize: '11px', minWidth: '30px', color: '#1e3a8a' }}>{footerOffset}px</span>
-        </div>
       </div>
 
       {showQuickFill && (
@@ -894,7 +880,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 letterSpacing: '8px',
                 textTransform: 'none',
                 fontFamily: "'Times New Roman', serif",
-                transform: `translateX(${footerOffset}px)`
+                transform: 'translateX(0px)' // Manually edit this value (e.g., 50px) to move text left/right
               }}>
                 Original
               </div>
