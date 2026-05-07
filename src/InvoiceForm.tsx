@@ -170,6 +170,28 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     receiverName: '',
   });
   const [invoiceColor, setInvoiceColor] = useState('#343444');
+  
+  const [pageSettings, setPageSettings] = useState({
+    size: 'A4',
+    width: 210,
+    height: 297,
+    orientation: 'portrait',
+    marginPreset: 'normal',
+    marginTop: 15,
+    marginBottom: 15,
+    marginLeft: 20,
+    marginRight: 12,
+  });
+  const [showPageSetup, setShowPageSetup] = useState(false);
+
+  const PAPER_SIZES: Record<string, { w: number, h: number }> = {
+    'A4': { w: 210, h: 297 },
+    'Letter': { w: 216, h: 279 },
+    'Legal': { w: 216, h: 356 },
+    'Statement': { w: 140, h: 216 },
+    'Folio': { w: 210, h: 330 },
+    'A5': { w: 148, h: 210 },
+  };
 
   const handleFormChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -206,10 +228,13 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     try {
       const canvas = await html2canvas(invoiceRef.current, { scale: 2 });
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      
+      const isPortrait = pageSettings.orientation === 'portrait';
+      const w = isPortrait ? pageSettings.width : pageSettings.height;
+      const h = isPortrait ? pageSettings.height : pageSettings.width;
+      
+      const pdf = new jsPDF(isPortrait ? 'p' : 'l', 'mm', [w, h]);
+      pdf.addImage(imgData, 'PNG', 0, 0, w, h);
       pdf.save(`Invoice.pdf`);
     } catch (error) {
       console.error(error);
@@ -255,8 +280,15 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           </xml>
           <![endif]-->
           <style>
+            @page {
+              size: ${pageSettings.orientation === 'portrait' ? `${pageSettings.width}mm ${pageSettings.height}mm` : `${pageSettings.height}mm ${pageSettings.width}mm`};
+              margin: ${pageSettings.marginTop}mm ${pageSettings.marginRight}mm ${pageSettings.marginBottom}mm ${pageSettings.marginLeft}mm;
+            }
             body { font-family: 'Times New Roman', serif; font-weight: bold; }
-            .invoice-wrapper { width: 100%; max-width: 800px; margin: 0 auto; }
+            .invoice-wrapper { 
+              width: ${pageSettings.orientation === 'portrait' ? `${pageSettings.width}mm` : `${pageSettings.height}mm`};
+              margin: 0 auto;
+            }
             .header-container { display: table; width: 100%; margin-bottom: 20px; }
             .header-left, .header-right { display: table-cell; vertical-align: top; }
             .address-container { display: table; width: 100%; border-spacing: 20px 0; }
@@ -293,8 +325,27 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         .invoice-wrapper .theme-text {
           color: ${invoiceColor} !important;
         }
+        .page-setup-modal label {
+          display: block;
+          margin-bottom: 4px;
+          font-size: 12px;
+          font-weight: bold;
+          color: #475569;
+        }
+        .page-setup-modal input, .page-setup-modal select {
+          width: 100%;
+          padding: 8px;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          margin-bottom: 12px;
+          font-size: 14px;
+        }
       `}</style>
       <div className="invoice-actions">
+        <button className="btn" onClick={() => setShowPageSetup(true)} style={{ backgroundColor: '#475569', color: '#fff' }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          Page Setup
+        </button>
         <button className="btn" onClick={exportPDF}>Export to PDF</button>
         <button className="btn" onClick={exportWord} style={{ backgroundColor: '#10b981' }}>Export to Word</button>
         <button className="btn" onClick={() => window.print()} style={{ backgroundColor: '#fff', color: '#2563eb', border: '1px solid #2563eb' }}>Print</button>
@@ -315,6 +366,107 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           />
         </div>
       </div>
+
+      {showPageSetup && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+          backgroundColor: 'rgba(15, 23, 42, 0.75)', backdropFilter: 'blur(4px)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 3000
+        }}>
+          <div className="page-setup-modal" style={{
+            backgroundColor: 'white', padding: '30px', borderRadius: '16px', width: '90%', maxWidth: '500px',
+            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)'
+          }}>
+            <h2 style={{ marginTop: 0, borderBottom: '1px solid #e2e8f0', paddingBottom: '15px', marginBottom: '20px' }}>Page Setup</h2>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+              <div>
+                <label>Paper Size</label>
+                <select 
+                  value={pageSettings.size} 
+                  onChange={(e) => {
+                    const size = e.target.value;
+                    if (size !== 'Custom') {
+                      setPageSettings(prev => ({ 
+                        ...prev, 
+                        size, 
+                        width: PAPER_SIZES[size].w, 
+                        height: PAPER_SIZES[size].h 
+                      }));
+                    } else {
+                      setPageSettings(prev => ({ ...prev, size }));
+                    }
+                  }}
+                >
+                  {Object.keys(PAPER_SIZES).map(s => <option key={s} value={s}>{s}</option>)}
+                  <option value="Custom">Custom</option>
+                </select>
+              </div>
+              <div>
+                <label>Orientation</label>
+                <select 
+                  value={pageSettings.orientation} 
+                  onChange={(e) => setPageSettings(prev => ({ ...prev, orientation: e.target.value as any }))}
+                >
+                  <option value="portrait">Portrait</option>
+                  <option value="landscape">Landscape</option>
+                </select>
+              </div>
+            </div>
+
+            {pageSettings.size === 'Custom' && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div>
+                  <label>Width (mm)</label>
+                  <input type="number" value={pageSettings.width} onChange={e => setPageSettings(prev => ({ ...prev, width: Number(e.target.value) }))} />
+                </div>
+                <div>
+                  <label>Height (mm)</label>
+                  <input type="number" value={pageSettings.height} onChange={e => setPageSettings(prev => ({ ...prev, height: Number(e.target.value) }))} />
+                </div>
+              </div>
+            )}
+
+            <label>Margins Preset</label>
+            <select 
+              value={pageSettings.marginPreset} 
+              onChange={(e) => {
+                const preset = e.target.value;
+                let margins = { top: 15, bottom: 15, left: 20, right: 12 };
+                if (preset === 'narrow') margins = { top: 10, bottom: 10, left: 10, right: 10 };
+                if (preset === 'wide') margins = { top: 30, bottom: 30, left: 30, right: 30 };
+                setPageSettings(prev => ({ 
+                  ...prev, 
+                  marginPreset: preset, 
+                  marginTop: margins.top, 
+                  marginBottom: margins.bottom, 
+                  marginLeft: margins.left, 
+                  marginRight: margins.right 
+                }));
+              }}
+            >
+              <option value="normal">Normal</option>
+              <option value="narrow">Narrow</option>
+              <option value="wide">Wide</option>
+              <option value="custom">Custom</option>
+            </select>
+
+            {pageSettings.marginPreset === 'custom' && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '10px' }}>
+                <div><label>Top</label><input type="number" value={pageSettings.marginTop} onChange={e => setPageSettings(prev => ({ ...prev, marginTop: Number(e.target.value) }))} /></div>
+                <div><label>Bottom</label><input type="number" value={pageSettings.marginBottom} onChange={e => setPageSettings(prev => ({ ...prev, marginBottom: Number(e.target.value) }))} /></div>
+                <div><label>Left</label><input type="number" value={pageSettings.marginLeft} onChange={e => setPageSettings(prev => ({ ...prev, marginLeft: Number(e.target.value) }))} /></div>
+                <div><label>Right</label><input type="number" value={pageSettings.marginRight} onChange={e => setPageSettings(prev => ({ ...prev, marginRight: Number(e.target.value) }))} /></div>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', marginTop: '10px' }}>
+              <button className="btn" onClick={() => setShowPageSetup(false)} style={{ background: '#3b82f6', color: 'white', padding: '10px 20px' }}>Apply Settings</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showQuickFill && (
         <div style={{
@@ -474,7 +626,19 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       )}
 
       <div className="invoice-container">
-        <div className="invoice-wrapper" ref={invoiceRef} style={{ '--field-color': invoiceColor } as any}>
+        <div 
+          className="invoice-wrapper" 
+          ref={invoiceRef} 
+          style={{ 
+            '--field-color': invoiceColor,
+            width: pageSettings.orientation === 'portrait' ? `${pageSettings.width}mm` : `${pageSettings.height}mm`,
+            minHeight: pageSettings.orientation === 'portrait' ? `${pageSettings.height}mm` : `${pageSettings.width}mm`,
+            paddingTop: `${pageSettings.marginTop}mm`,
+            paddingBottom: `${pageSettings.marginBottom}mm`,
+            paddingLeft: `${pageSettings.marginLeft}mm`,
+            paddingRight: `${pageSettings.marginRight}mm`,
+          } as any}
+        >
           {/* Vertical Left Sidebar */}
           <div className="vertical-sidebar">
             <span>በብርሃንና ሰላም ማተሚያ ድሪጅት የግብር ከፋይ መለያ ቁጥር 0000007140</span>
