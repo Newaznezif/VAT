@@ -234,43 +234,50 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       // Ensure element is fully loaded and visible
       const element = invoiceRef.current;
       
+      // Detect mobile for optimizations
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      
       // Use html2canvas with specific settings for mobile
       const canvas = await html2canvas(element, {
-        scale: 2, // Higher scale for better quality
+        scale: isMobile ? 1.5 : 2, // Slightly lower scale on mobile to save memory
         useCORS: true,
         allowTaint: true,
         logging: false,
         backgroundColor: '#ffffff',
-        // These help capture the element even if it's scrolled or off-screen
         width: element.offsetWidth,
         height: element.offsetHeight,
         scrollX: 0,
         scrollY: 0,
-        windowWidth: element.offsetWidth + 100, // Extra buffer
-        windowHeight: element.offsetHeight + 100
+        windowWidth: element.offsetWidth,
+        windowHeight: element.offsetHeight
       });
       
-      const imgData = canvas.toDataURL('image/png', 1.0);
+      const imgData = canvas.toDataURL('image/png', 0.8); // Slightly lower quality for better compatibility
       
       const isPortrait = pageSettings.orientation === 'portrait';
       const w = isPortrait ? pageSettings.width : pageSettings.height;
       const h = isPortrait ? pageSettings.height : pageSettings.width;
       
       const pdf = new jsPDF(isPortrait ? 'p' : 'l', 'mm', [w, h]);
-      
-      // Calculate aspect ratio to fit the page exactly
       pdf.addImage(imgData, 'PNG', 0, 0, w, h, undefined, 'FAST');
       
       const fileName = `VAT_Invoice_${formData.invoiceNo || 'Draft'}.pdf`;
+      const blob = pdf.output('blob');
       
-      // For mobile compatibility, try multiple saving methods if needed
-      try {
-        pdf.save(fileName);
-      } catch (saveErr) {
-        // Fallback for some mobile browsers: open in new tab
-        const blob = pdf.output('blob');
-        const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
+      // Use saveAs for best compatibility
+      saveAs(blob, fileName);
+      
+      // Fallback for some mobile environments (like in-app browsers)
+      if (isMobile) {
+        setTimeout(() => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.target = '_blank';
+          document.body.appendChild(a);
+          // Don't click it automatically to avoid popup blockers, 
+          // but we can try as a secondary fallback if user reports issues
+        }, 500);
       }
     } catch (error) {
       console.error('PDF Export Error:', error);
@@ -338,18 +345,10 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
 
       const sourceHTML = header + clone.outerHTML + footer;
       const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
-      
       const fileName = `VAT_Invoice_${formData.invoiceNo || 'Draft'}.doc`;
       
-      // Use more robust download for mobile
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      // Use saveAs for Word as well
+      saveAs(blob, fileName);
       
     } catch (error) {
       console.error('Word Export Error:', error);
