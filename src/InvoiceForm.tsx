@@ -263,14 +263,14 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       pdf.addImage(imgData, 'PNG', 0, 0, w, h, undefined, 'FAST');
       
       const fileName = `VAT_Invoice_${formData.invoiceNo || 'Draft'}.pdf`;
-      const blob = pdf.output('blob');
       
       if (isMobile) {
-        const url = URL.createObjectURL(blob);
-        setReadyDownload({ url, name: fileName });
+        // Use Data URL for mobile as it's often more reliable than Blobs in restricted environments
+        const dataUrl = pdf.output('datauristring');
+        setReadyDownload({ url: dataUrl, name: fileName });
         setExportProgress('PDF is ready!');
       } else {
-        saveAs(blob, fileName);
+        pdf.save(fileName);
         setIsExporting(false);
         setExportProgress('');
       }
@@ -332,9 +332,13 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       const fileName = `VAT_Invoice_${formData.invoiceNo || 'Draft'}.doc`;
       
       if (isMobile) {
-        const url = URL.createObjectURL(blob);
-        setReadyDownload({ url, name: fileName });
-        setExportProgress('Word document is ready!');
+        // Convert Blob to Data URL for better mobile compatibility
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setReadyDownload({ url: reader.result as string, name: fileName });
+          setExportProgress('Word document is ready!');
+        };
+        reader.readAsDataURL(blob);
       } else {
         saveAs(blob, fileName);
         setIsExporting(false);
@@ -435,11 +439,14 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               <a 
                 href={readyDownload.url} 
                 download={readyDownload.name}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => {
+                  // Don't close immediately to allow the browser to process the request
                   setTimeout(() => {
                     setIsExporting(false);
                     setReadyDownload(null);
-                  }, 500);
+                  }, 3000);
                 }}
                 style={{
                   display: 'inline-block',
