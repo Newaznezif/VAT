@@ -142,6 +142,8 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
   const [showQrModal, setShowQrModal] = useState(false);
   const [tempQrInput, setTempQrInput] = useState('');
   const [showQuickFill, setShowQuickFill] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportProgress, setExportProgress] = useState('');
   const [formData, setFormData] = useState({
     invoiceNo: '',
     invoiceDate: '',
@@ -225,24 +227,65 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
 
   const exportPDF = async () => {
     if (!invoiceRef.current) return;
+    setIsExporting(true);
+    setExportProgress('Generating high-quality PDF...');
+    
     try {
-      const canvas = await html2canvas(invoiceRef.current, { scale: 2 });
-      const imgData = canvas.toDataURL('image/png');
+      // Ensure element is fully loaded and visible
+      const element = invoiceRef.current;
+      
+      // Use html2canvas with specific settings for mobile
+      const canvas = await html2canvas(element, {
+        scale: 2, // Higher scale for better quality
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        // These help capture the element even if it's scrolled or off-screen
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: element.offsetWidth + 100, // Extra buffer
+        windowHeight: element.offsetHeight + 100
+      });
+      
+      const imgData = canvas.toDataURL('image/png', 1.0);
       
       const isPortrait = pageSettings.orientation === 'portrait';
       const w = isPortrait ? pageSettings.width : pageSettings.height;
       const h = isPortrait ? pageSettings.height : pageSettings.width;
       
       const pdf = new jsPDF(isPortrait ? 'p' : 'l', 'mm', [w, h]);
-      pdf.addImage(imgData, 'PNG', 0, 0, w, h);
-      pdf.save(`Invoice.pdf`);
+      
+      // Calculate aspect ratio to fit the page exactly
+      pdf.addImage(imgData, 'PNG', 0, 0, w, h, undefined, 'FAST');
+      
+      const fileName = `VAT_Invoice_${formData.invoiceNo || 'Draft'}.pdf`;
+      
+      // For mobile compatibility, try multiple saving methods if needed
+      try {
+        pdf.save(fileName);
+      } catch (saveErr) {
+        // Fallback for some mobile browsers: open in new tab
+        const blob = pdf.output('blob');
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      }
     } catch (error) {
-      console.error(error);
+      console.error('PDF Export Error:', error);
+      alert('Failed to generate PDF. On mobile, please ensure you are using a modern browser like Chrome or Safari.');
+    } finally {
+      setIsExporting(false);
+      setExportProgress('');
     }
   };
 
-  const exportWord = () => {
+  const exportWord = async () => {
     if (!invoiceRef.current) return;
+    setIsExporting(true);
+    setExportProgress('Preparing Word document...');
+    
     try {
       const clone = invoiceRef.current.cloneNode(true) as HTMLElement;
 
@@ -251,12 +294,13 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       const clonedInputs = clone.querySelectorAll('input');
 
       originalInputs.forEach((input, index) => {
+        if (!clonedInputs[index]) return;
         const span = document.createElement('span');
-        span.innerText = input.value || '\u00A0';
-        span.style.cssText = input.style.cssText;
+        span.innerText = (input as HTMLInputElement).value || '\u00A0';
+        span.style.cssText = (input as HTMLInputElement).style.cssText;
         span.style.display = 'inline-block';
         span.style.minWidth = '50px';
-        span.style.color = invoiceColor; // Explicitly set color for Word
+        span.style.color = invoiceColor;
         span.className = 'field-span';
         if (input.className.includes('field-input')) {
           span.style.borderBottom = '1px solid #000';
@@ -264,21 +308,12 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         clonedInputs[index].parentNode?.replaceChild(span, clonedInputs[index]);
       });
 
-      // Inject Word-compatible CSS to mimic the browser layout
+      // Inject Word-compatible CSS
       const header = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
           <meta charset='utf-8'>
           <title>Invoice</title>
-          <!--[if gte mso 9]>
-          <xml>
-            <w:WordDocument>
-              <w:View>Print</w:View>
-              <w:Zoom>100</w:Zoom>
-              <w:DoNotOptimizeForBrowser/>
-            </w:WordDocument>
-          </xml>
-          <![endif]-->
           <style>
             @page {
               size: ${pageSettings.orientation === 'portrait' ? `${pageSettings.width}mm ${pageSettings.height}mm` : `${pageSettings.height}mm ${pageSettings.width}mm`};
@@ -286,23 +321,15 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             }
             body { font-family: 'Times New Roman', serif; font-weight: bold; }
             .invoice-wrapper { 
-              width: ${pageSettings.orientation === 'portrait' ? `${pageSettings.width}mm` : `${pageSettings.height}mm`};
+              width: 100%;
               margin: 0 auto;
             }
-            .header-container { display: table; width: 100%; margin-bottom: 20px; }
-            .header-left, .header-right { display: table-cell; vertical-align: top; }
-            .address-container { display: table; width: 100%; border-spacing: 20px 0; }
-            .address-block { display: table-cell; width: 45%; vertical-align: top; }
-            .field-row { display: table; width: 100%; margin-bottom: 10px; }
+            .header-container { width: 100%; margin-bottom: 20px; }
+            .address-container { width: 100%; margin-bottom: 20px; }
             .invoice-table { border-collapse: collapse; width: 100%; margin: 20px 0; }
             .invoice-table th, .invoice-table td { border: 1px solid black; padding: 8px; text-align: left; }
-            .calculations-container { display: table; width: 100%; }
-            .calc-labels { display: table-cell; width: 60%; text-align: right; padding-right: 15px; }
-            .calc-values { display: table-cell; width: 40%; border: 1px solid black; }
-            .footer-section { margin-top: 30px; }
-            .vertical-sidebar { display: none; }
-            /* Apply theme color to user fields and totals in Word */
             .theme-text, span.field-span { color: ${invoiceColor} !important; }
+            .vertical-sidebar { display: none; }
           </style>
         </head>
         <body>
@@ -311,10 +338,38 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
 
       const sourceHTML = header + clone.outerHTML + footer;
       const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
-      saveAs(blob, 'VAT_Invoice_Editable.doc');
+      
+      const fileName = `VAT_Invoice_${formData.invoiceNo || 'Draft'}.doc`;
+      
+      // Use more robust download for mobile
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
     } catch (error) {
-      console.error(error);
+      console.error('Word Export Error:', error);
+      alert('Failed to generate Word document.');
+    } finally {
+      setIsExporting(false);
+      setExportProgress('');
     }
+  };
+
+  const handlePrint = () => {
+    // Small delay to ensure any open mobile keyboards are closed
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    
+    // Give time for keyboard to retract and UI to settle
+    setTimeout(() => {
+      window.print();
+    }, 300);
   };
 
   return (
@@ -346,9 +401,13 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
           Page Setup
         </button>
-        <button className="btn" onClick={exportPDF}>Export to PDF</button>
-        <button className="btn" onClick={exportWord} style={{ backgroundColor: '#10b981' }}>Export to Word</button>
-        <button className="btn" onClick={() => window.print()} style={{ backgroundColor: '#fff', color: '#2563eb', border: '1px solid #2563eb' }}>Print</button>
+        <button className="btn" onClick={exportPDF} disabled={isExporting}>
+          {isExporting && exportProgress.includes('PDF') ? 'Exporting...' : 'Export to PDF'}
+        </button>
+        <button className="btn" onClick={exportWord} style={{ backgroundColor: '#10b981' }} disabled={isExporting}>
+          {isExporting && exportProgress.includes('Word') ? 'Exporting...' : 'Export to Word'}
+        </button>
+        <button className="btn" onClick={handlePrint} style={{ backgroundColor: '#fff', color: '#2563eb', border: '1px solid #2563eb' }}>Print</button>
         <button className="btn" onClick={() => setShowQrModal(true)} style={{ backgroundColor: '#6366f1', color: '#fff' }}>Generate QR</button>
         <button className="btn" onClick={() => setShowQuickFill(true)} style={{ backgroundColor: '#f59e0b', color: '#fff' }}>Quick Fill Form</button>
         <button className="btn" onClick={onLogout} style={{ backgroundColor: '#ef4444', color: '#fff' }}>Logout</button>
@@ -366,6 +425,25 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           />
         </div>
       </div>
+
+      {isExporting && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+          backgroundColor: 'rgba(255, 255, 255, 0.8)', backdropFilter: 'blur(4px)',
+          display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
+          zIndex: 5000
+        }}>
+          <div style={{
+            width: '50px', height: '50px', border: '5px solid #f3f3f3', borderTop: '5px solid #3b82f6',
+            borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: '20px'
+          }}></div>
+          <style>{`
+            @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+          `}</style>
+          <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#1e3a8a' }}>{exportProgress}</div>
+          <div style={{ fontSize: '14px', color: '#64748b', marginTop: '10px' }}>This may take a moment on mobile devices...</div>
+        </div>
+      )}
 
       {showPageSetup && (
         <div style={{
