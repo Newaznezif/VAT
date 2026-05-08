@@ -144,6 +144,7 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
   const [showQuickFill, setShowQuickFill] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [exportProgress, setExportProgress] = useState('');
+  const [readyDownload, setReadyDownload] = useState<{url: string, name: string} | null>(null);
   const [formData, setFormData] = useState({
     invoiceNo: '',
     invoiceDate: '',
@@ -264,39 +265,33 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       const fileName = `VAT_Invoice_${formData.invoiceNo || 'Draft'}.pdf`;
       const blob = pdf.output('blob');
       
-      // Use saveAs for best compatibility
-      saveAs(blob, fileName);
-      
-      // Fallback for some mobile environments (like in-app browsers)
       if (isMobile) {
-        setTimeout(() => {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.target = '_blank';
-          document.body.appendChild(a);
-          // Don't click it automatically to avoid popup blockers, 
-          // but we can try as a secondary fallback if user reports issues
-        }, 500);
+        const url = URL.createObjectURL(blob);
+        setReadyDownload({ url, name: fileName });
+        setExportProgress('PDF is ready!');
+      } else {
+        saveAs(blob, fileName);
+        setIsExporting(false);
+        setExportProgress('');
       }
     } catch (error) {
       console.error('PDF Export Error:', error);
-      alert('Failed to generate PDF. On mobile, please ensure you are using a modern browser like Chrome or Safari.');
-    } finally {
+      alert('Failed to generate PDF. Please ensure you are not in an incognito tab or using an in-app browser.');
       setIsExporting(false);
       setExportProgress('');
     }
   };
 
-  const exportWord = async () => {
+  const exportWord = () => {
     if (!invoiceRef.current) return;
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
     setIsExporting(true);
     setExportProgress('Preparing Word document...');
+    setReadyDownload(null);
     
     try {
       const clone = invoiceRef.current.cloneNode(true) as HTMLElement;
-
-      // Replace all inputs with their current values
       const originalInputs = invoiceRef.current.querySelectorAll('input');
       const clonedInputs = clone.querySelectorAll('input');
 
@@ -315,26 +310,16 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         clonedInputs[index].parentNode?.replaceChild(span, clonedInputs[index]);
       });
 
-      // Inject Word-compatible CSS
       const header = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-        <head>
-          <meta charset='utf-8'>
-          <title>Invoice</title>
+        <head><meta charset='utf-8'><title>Invoice</title>
           <style>
             @page {
               size: ${pageSettings.orientation === 'portrait' ? `${pageSettings.width}mm ${pageSettings.height}mm` : `${pageSettings.height}mm ${pageSettings.width}mm`};
               margin: ${pageSettings.marginTop}mm ${pageSettings.marginRight}mm ${pageSettings.marginBottom}mm ${pageSettings.marginLeft}mm;
             }
             body { font-family: 'Times New Roman', serif; font-weight: bold; }
-            .invoice-wrapper { 
-              width: 100%;
-              margin: 0 auto;
-            }
-            .header-container { width: 100%; margin-bottom: 20px; }
-            .address-container { width: 100%; margin-bottom: 20px; }
-            .invoice-table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-            .invoice-table th, .invoice-table td { border: 1px solid black; padding: 8px; text-align: left; }
+            .invoice-wrapper { width: 100%; margin: 0 auto; }
             .theme-text, span.field-span { color: ${invoiceColor} !important; }
             .vertical-sidebar { display: none; }
           </style>
@@ -342,18 +327,22 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         <body>
       `;
       const footer = "</body></html>";
-
       const sourceHTML = header + clone.outerHTML + footer;
       const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
       const fileName = `VAT_Invoice_${formData.invoiceNo || 'Draft'}.doc`;
       
-      // Use saveAs for Word as well
-      saveAs(blob, fileName);
-      
+      if (isMobile) {
+        const url = URL.createObjectURL(blob);
+        setReadyDownload({ url, name: fileName });
+        setExportProgress('Word document is ready!');
+      } else {
+        saveAs(blob, fileName);
+        setIsExporting(false);
+        setExportProgress('');
+      }
     } catch (error) {
       console.error('Word Export Error:', error);
       alert('Failed to generate Word document.');
-    } finally {
       setIsExporting(false);
       setExportProgress('');
     }
@@ -400,11 +389,11 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
           Page Setup
         </button>
-        <button className="btn" onClick={exportPDF} disabled={isExporting}>
-          {isExporting && exportProgress.includes('PDF') ? 'Exporting...' : 'Export to PDF'}
+        <button className="btn" onClick={() => { setReadyDownload(null); exportPDF(); }} disabled={isExporting}>
+          {isExporting && exportProgress.includes('PDF') ? 'Processing...' : 'Export to PDF'}
         </button>
-        <button className="btn" onClick={exportWord} style={{ backgroundColor: '#10b981' }} disabled={isExporting}>
-          {isExporting && exportProgress.includes('Word') ? 'Exporting...' : 'Export to Word'}
+        <button className="btn" onClick={() => { setReadyDownload(null); exportWord(); }} style={{ backgroundColor: '#10b981' }} disabled={isExporting}>
+          {isExporting && exportProgress.includes('Word') ? 'Processing...' : 'Export to Word'}
         </button>
         <button className="btn" onClick={handlePrint} style={{ backgroundColor: '#fff', color: '#2563eb', border: '1px solid #2563eb' }}>Print</button>
         <button className="btn" onClick={() => setShowQrModal(true)} style={{ backgroundColor: '#6366f1', color: '#fff' }}>Generate QR</button>
@@ -440,7 +429,42 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
           `}</style>
           <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#1e3a8a' }}>{exportProgress}</div>
-          <div style={{ fontSize: '14px', color: '#64748b', marginTop: '10px' }}>This may take a moment on mobile devices...</div>
+          
+          {readyDownload ? (
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+              <a 
+                href={readyDownload.url} 
+                download={readyDownload.name}
+                onClick={() => {
+                  setTimeout(() => {
+                    setIsExporting(false);
+                    setReadyDownload(null);
+                  }, 500);
+                }}
+                style={{
+                  display: 'inline-block',
+                  background: '#10b981',
+                  color: 'white',
+                  padding: '15px 30px',
+                  borderRadius: '12px',
+                  textDecoration: 'none',
+                  fontWeight: 'bold',
+                  fontSize: '18px',
+                  boxShadow: '0 10px 15px -3px rgba(16, 185, 129, 0.4)'
+                }}
+              >
+                📥 CLICK TO DOWNLOAD NOW
+              </a>
+              <button 
+                onClick={() => { setIsExporting(false); setReadyDownload(null); }}
+                style={{ display: 'block', margin: '20px auto 0', background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <div style={{ fontSize: '14px', color: '#64748b', marginTop: '10px' }}>This may take a moment on mobile devices...</div>
+          )}
         </div>
       )}
 
