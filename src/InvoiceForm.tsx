@@ -265,10 +265,11 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       const fileName = `VAT_Invoice_${formData.invoiceNo || 'Draft'}.pdf`;
       
       if (isMobile) {
-        // Use Data URL for mobile as it's often more reliable than Blobs in restricted environments
-        const dataUrl = pdf.output('datauristring');
-        setReadyDownload({ url: dataUrl, name: fileName });
-        setExportProgress('PDF is ready!');
+        // Blobs are much better for large files like high-res PDFs
+        const blob = pdf.output('blob');
+        const url = URL.createObjectURL(blob);
+        setReadyDownload({ url, name: fileName });
+        setExportProgress('PDF Document Ready!');
       } else {
         pdf.save(fileName);
         setIsExporting(false);
@@ -332,13 +333,9 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       const fileName = `VAT_Invoice_${formData.invoiceNo || 'Draft'}.doc`;
       
       if (isMobile) {
-        // Convert Blob to Data URL for better mobile compatibility
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setReadyDownload({ url: reader.result as string, name: fileName });
-          setExportProgress('Word document is ready!');
-        };
-        reader.readAsDataURL(blob);
+        const url = URL.createObjectURL(blob);
+        setReadyDownload({ url, name: fileName });
+        setExportProgress('Word Document Ready!');
       } else {
         saveAs(blob, fileName);
         setIsExporting(false);
@@ -442,11 +439,12 @@ const InvoiceContent: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => {
-                  // Don't close immediately to allow the browser to process the request
+                  // Keep the modal open for a bit so the user can see it worked
+                  // Some mobile browsers close the tab/app if we don't handle this carefully
                   setTimeout(() => {
                     setIsExporting(false);
                     setReadyDownload(null);
-                  }, 3000);
+                  }, 10000); // 10 seconds is safer
                 }}
                 style={{
                   display: 'inline-block',
